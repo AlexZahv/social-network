@@ -1,1 +1,29 @@
+spring:
+  main:
+    allow-bean-definition-overriding: true
+  jpa:
+    database: POSTGRESQL
+    show-sql: false
+    generate-ddl: false
+    hibernate:
+      ddl-auto: validate
+    properties:
+      hibernate:
+        order_updates: true
+        jdbc:
+          batch_size: 1000
+        generate_statistics: false
+  datasource:
+    driverClassName: org.postgresql.Driver
+    hikari:
+      connectionTimeout: 20000
+      minimumIdle: 5
+      maximumPoolSize: 20
+      autoCommit: true
+      leak-detection-threshold: 60000
+    url: jdbc:postgresql://localhost:5432/postgres
+    username: postgres
+    password: postgres
+  liquibase:
+    change-log: classpath:db/changelog/db.changelog-master.xml
 

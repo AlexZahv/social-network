@@ -7,9 +7,11 @@ import io.swagger.v3.oas.annotations.media.Schema
 import io.swagger.v3.oas.annotations.responses.ApiResponse
 import io.swagger.v3.oas.annotations.tags.Tag
 import jakarta.validation.Valid
+import lombok.RequiredArgsConstructor
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
+import ru.zahv.alex.socialnetwork.business.service.UserService
 import ru.zahv.alex.socialnetwork.web.dto.Error500ResponseDTO
 import ru.zahv.alex.socialnetwork.web.dto.UserRegisterRequestDTO
 import ru.zahv.alex.socialnetwork.web.dto.UserRegisterResponseDTO
@@ -18,7 +20,7 @@ import ru.zahv.alex.socialnetwork.web.dto.UserResponseDTO
 @RestController
 @RequestMapping("/api/user")
 @Tag(name = "user", description = "the user API")
-class UserController {
+class UserController(private val userService: UserService) {
     /**
      * GET /user/get/{id}
      * Получение анкеты пользователя
@@ -68,9 +70,9 @@ class UserController {
     fun getUserById(
             @Parameter(name = "id", description = "Идентификатор пользователя", required = true)
             @PathVariable("id")
-            id: String?,
+            id: String,
     ): ResponseEntity<UserResponseDTO?>? {
-        return ResponseEntity(HttpStatus.NOT_IMPLEMENTED)
+        return ResponseEntity.ok(userService.getUserById(id))
     }
 
     /**
@@ -113,10 +115,10 @@ class UserController {
     @PostMapping(value = ["/user/register"], produces = ["application/json"], consumes = ["application/json"])
     fun registerNewUser(
             @Parameter(name = "UserRegisterPostRequest", description = "")
-            @RequestBody(required = false)
+            @RequestBody(required = true)
             @Valid
             userRegisterPostRequest: UserRegisterRequestDTO?,
     ): ResponseEntity<UserRegisterResponseDTO?>? {
-        return ResponseEntity(HttpStatus.NOT_IMPLEMENTED)
+        return ResponseEntity.ok(userService.registerUser(userRegisterPostRequest!!))
     }
 }

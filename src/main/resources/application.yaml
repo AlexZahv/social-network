@@ -6,7 +6,7 @@ spring:
     show-sql: false
     generate-ddl: false
     hibernate:
-      ddl-auto: validate
+      ddl-auto: none
     properties:
       hibernate:
         order_updates: true
@@ -26,4 +26,9 @@ spring:
     password: postgres
   liquibase:
     change-log: classpath:db/changelog/db.changelog-master.xml
+
+# Token lifetime in seconds
+auth:
+  token:
+    lifetime: 1000
 

@@ -5,14 +5,12 @@ import io.swagger.v3.oas.annotations.media.Schema
 import lombok.Getter
 import lombok.Setter
 
-@Getter
-@Setter
-class LoginRequestDTO {
+data class LoginRequestDTO (
     @Schema(name = "id", description = "Идентификатор пользователя", required = false)
     @JsonProperty("id")
-    private val id: String? = null
+    val id: String,
 
     @Schema(name = "password", example = "Секретная строка", required = false)
     @JsonProperty("password")
-    private val password: String? = null
-}
+    val password: String
+)

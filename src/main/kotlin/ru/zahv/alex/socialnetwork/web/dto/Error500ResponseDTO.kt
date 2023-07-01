@@ -1,4 +1,5 @@
 package ru.zahv.alex.socialnetwork.web.dto
 
-class Error500ResponseDTO {
-}
+data class Error500ResponseDTO(
+        private val message: String? = null
+)

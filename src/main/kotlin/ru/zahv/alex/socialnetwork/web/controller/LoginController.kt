@@ -14,13 +14,14 @@ import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestMethod
 import org.springframework.web.bind.annotation.RestController
+import ru.zahv.alex.socialnetwork.business.service.AuthService
 import ru.zahv.alex.socialnetwork.web.dto.Error500ResponseDTO
 import ru.zahv.alex.socialnetwork.web.dto.LoginRequestDTO
 import ru.zahv.alex.socialnetwork.web.dto.LoginResponseDTO
 
 @Tag(name = "login", description = "the login API")
 @RestController
-class LoginController {
+class LoginController(val authService: AuthService) {
     /**
      * POST /login
      * Упрощенный процесс аутентификации путем передачи идентификатор пользователя и получения токена для дальнейшего прохождения авторизации
@@ -50,10 +51,10 @@ class LoginController {
     )
     fun loginPost(
         @Parameter(name = "LoginRequestDTO", description = "Данные для авторизации")
-        @RequestBody(required = false)
+        @RequestBody(required = true)
         @Valid
-        loginRequestDTO: LoginRequestDTO?,
+        loginRequestDTO: LoginRequestDTO,
     ): ResponseEntity<LoginResponseDTO?>? {
-        return ResponseEntity(HttpStatus.NOT_IMPLEMENTED)
+        return ResponseEntity.ok(authService.login(loginRequestDTO))
     }
 }

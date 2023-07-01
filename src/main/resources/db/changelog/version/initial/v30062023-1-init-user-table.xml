@@ -36,6 +36,9 @@
             <column name="biography" type="text">
                 <constraints nullable="true"/>
             </column>
+            <column name="password" type="text">
+                <constraints nullable="false"/>
+            </column>
         </createTable>
     </changeSet>
     <changeSet id="v30062023-init token table" author="azakhvalinskiy">
@@ -54,10 +57,10 @@
             <column name="user_id" type="uuid">
                 <constraints foreignKeyName="fk_user_id" referencedTableName="users" referencedColumnNames="id"/>
             </column>
-            <column name="issued_at" type="timestamp">
+            <column name="issue_date" type="timestamp">
                 <constraints nullable="false"/>
             </column>
-            <column name="expired_at" type="timestamp">
+            <column name="expire_date" type="timestamp">
                 <constraints nullable="false"/>
             </column>
         </createTable>

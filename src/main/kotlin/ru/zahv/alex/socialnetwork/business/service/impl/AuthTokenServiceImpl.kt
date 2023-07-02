@@ -1,10 +1,10 @@
-package ru.zahv.alex.socialnetwork.business.service
+package ru.zahv.alex.socialnetwork.business.service.impl
 
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Service
 import ru.zahv.alex.socialnetwork.business.persistance.domain.AuthTokenEntity
-import ru.zahv.alex.socialnetwork.business.persistance.domain.UserEntity
 import ru.zahv.alex.socialnetwork.business.persistance.repository.AuthTokenRepository
+import ru.zahv.alex.socialnetwork.business.service.AuthTokenService
 import java.time.LocalDateTime
 import java.util.*
 
@@ -17,12 +17,17 @@ class AuthTokenServiceImpl(private val repository: AuthTokenRepository) : AuthTo
     @Value("\${auth.token.lifetime}")
     private var tokenLifetime: Long = DEFAULT_TOKEN_LIFETIME
 
-    override fun createToken(userId: UUID): AuthTokenEntity {
-        val token = repository.findFirstByUserIdAndExpireDateGreaterThanEqual(userId) ?: AuthTokenEntity()
+    override fun createToken(userId: String): AuthTokenEntity {
+        repository.updateAllByUserIdAndExpireDate(userId, LocalDateTime.now())
+        val token = repository.findFirstByUserIdAndExpireDateGreaterThan(userId) ?: AuthTokenEntity()
         token.issueDate = LocalDateTime.now()
         token.expireDate = LocalDateTime.now().plusSeconds(tokenLifetime)
         token.userId = userId
         token.value = UUID.randomUUID().toString()
         return repository.save(token)
+    }
+
+    override fun getToken(tokenValue: String): AuthTokenEntity? {
+        return repository.findFirstByValue(tokenValue)
     }
 }

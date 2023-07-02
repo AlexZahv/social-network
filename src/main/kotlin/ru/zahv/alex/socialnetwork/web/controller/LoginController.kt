@@ -7,15 +7,12 @@ import io.swagger.v3.oas.annotations.media.Schema
 import io.swagger.v3.oas.annotations.responses.ApiResponse
 import io.swagger.v3.oas.annotations.tags.Tag
 import jakarta.validation.Valid
-import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
-import org.springframework.validation.annotation.Validated
+import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
-import org.springframework.web.bind.annotation.RequestMapping
-import org.springframework.web.bind.annotation.RequestMethod
 import org.springframework.web.bind.annotation.RestController
 import ru.zahv.alex.socialnetwork.business.service.AuthService
-import ru.zahv.alex.socialnetwork.web.dto.Error500ResponseDTO
+import ru.zahv.alex.socialnetwork.web.dto.ErrorResponseDTO
 import ru.zahv.alex.socialnetwork.web.dto.LoginRequestDTO
 import ru.zahv.alex.socialnetwork.web.dto.LoginResponseDTO
 
@@ -34,26 +31,25 @@ class LoginController(val authService: AuthService) {
      * or Ошибка сервера (status code 503)
      */
     @Operation(
-        operationId = "loginPost",
-        responses = [
-            ApiResponse(responseCode = "200", description = "Успешная аутентификация", content = [Content(mediaType = "application/json", schema = Schema(implementation = LoginResponseDTO::class))]),
-            ApiResponse(responseCode = "400", description = "Невалидные данные"),
-            ApiResponse(responseCode = "404", description = "Пользователь не найден"),
-            ApiResponse(responseCode = "500", description = "Ошибка сервера", content = [Content(mediaType = "application/json", schema = Schema(implementation = Error500ResponseDTO::class))]),
-            ApiResponse(responseCode = "503", description = "Ошибка сервера", content = [Content(mediaType = "application/json", schema = Schema(implementation = Error500ResponseDTO::class))]),
-        ],
+            operationId = "loginPost",
+            responses = [
+                ApiResponse(responseCode = "200", description = "Успешная аутентификация", content = [Content(mediaType = "application/json", schema = Schema(implementation = LoginResponseDTO::class))]),
+                ApiResponse(responseCode = "400", description = "Невалидные данные"),
+                ApiResponse(responseCode = "404", description = "Пользователь не найден"),
+                ApiResponse(responseCode = "500", description = "Ошибка сервера", content = [Content(mediaType = "application/json", schema = Schema(implementation = ErrorResponseDTO::class))]),
+                ApiResponse(responseCode = "503", description = "Ошибка сервера", content = [Content(mediaType = "application/json", schema = Schema(implementation = ErrorResponseDTO::class))]),
+            ],
     )
-    @RequestMapping(
-        method = [RequestMethod.POST],
-        value = ["/login"],
-        produces = ["application/json"],
-        consumes = ["application/json"],
+    @PostMapping(
+            value = ["/login"],
+            produces = ["application/json"],
+            consumes = ["application/json"],
     )
     fun loginPost(
-        @Parameter(name = "LoginRequestDTO", description = "Данные для авторизации")
-        @RequestBody(required = true)
-        @Valid
-        loginRequestDTO: LoginRequestDTO,
+            @Parameter(name = "LoginRequestDTO", description = "Данные для авторизации")
+            @RequestBody(required = true)
+            @Valid
+            loginRequestDTO: LoginRequestDTO,
     ): ResponseEntity<LoginResponseDTO?>? {
         return ResponseEntity.ok(authService.login(loginRequestDTO))
     }

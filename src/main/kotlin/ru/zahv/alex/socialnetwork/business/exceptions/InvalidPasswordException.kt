@@ -1,8 +1,9 @@
 package ru.zahv.alex.socialnetwork.business.exceptions
 
-import java.lang.RuntimeException
+import org.springframework.http.HttpStatus
+import org.springframework.web.bind.annotation.ResponseStatus
 
-class InvalidPasswordException: RuntimeException {
-    constructor(message: String?) : super(message)
-    constructor() : super("Невалидные данные")
+@ResponseStatus(value = HttpStatus.BAD_REQUEST)
+class InvalidPasswordException(message: String?) : BaseSocialNetworkException(message) {
+    constructor() : this("Невалидные данные")
 }

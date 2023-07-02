@@ -10,7 +10,7 @@ import java.util.*
 data class UserEntity(
         @Id
         @GeneratedValue(strategy = GenerationType.UUID)
-        var id: UUID? = null,
+        var id: String? = null,
         var firstName: String? = null,
         var secondName: String? = null,
 

@@ -12,7 +12,7 @@
             </not>
         </preConditions>
         <createTable tableName="users">
-            <column name="id" type="uuid">
+            <column name="id" type="varchar(50)">
                 <constraints primaryKey="true"/>
             </column>
             <column name="first_name" type="varchar(50)">
@@ -54,7 +54,7 @@
             <column name="value" type="varchar(50)">
                 <constraints nullable="false"/>
             </column>
-            <column name="user_id" type="uuid">
+            <column name="user_id" type="varchar(50)">
                 <constraints foreignKeyName="fk_user_id" referencedTableName="users" referencedColumnNames="id"/>
             </column>
             <column name="issue_date" type="timestamp">

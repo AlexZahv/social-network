@@ -1,4 +1,4 @@
-package ru.zahv.alex.socialnetwork.business.config
+package ru.zahv.alex.socialnetwork.config
 
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration

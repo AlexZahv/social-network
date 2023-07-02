@@ -13,5 +13,5 @@ data class AuthTokenEntity (
     var value: String? = null,
     var issueDate: LocalDateTime? = null,
     var expireDate: LocalDateTime? = null,
-    var userId: UUID? = null
+    var userId: String? = null
 )

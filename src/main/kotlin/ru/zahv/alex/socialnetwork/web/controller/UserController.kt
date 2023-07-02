@@ -5,14 +5,15 @@ import io.swagger.v3.oas.annotations.Parameter
 import io.swagger.v3.oas.annotations.media.Content
 import io.swagger.v3.oas.annotations.media.Schema
 import io.swagger.v3.oas.annotations.responses.ApiResponse
+import io.swagger.v3.oas.annotations.security.SecurityRequirement
 import io.swagger.v3.oas.annotations.tags.Tag
 import jakarta.validation.Valid
-import lombok.RequiredArgsConstructor
-import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
+import ru.zahv.alex.socialnetwork.aop.Authenticated
 import ru.zahv.alex.socialnetwork.business.service.UserService
-import ru.zahv.alex.socialnetwork.web.dto.Error500ResponseDTO
+import ru.zahv.alex.socialnetwork.config.OpenApiConfiguration
+import ru.zahv.alex.socialnetwork.web.dto.ErrorResponseDTO
 import ru.zahv.alex.socialnetwork.web.dto.UserRegisterRequestDTO
 import ru.zahv.alex.socialnetwork.web.dto.UserRegisterResponseDTO
 import ru.zahv.alex.socialnetwork.web.dto.UserResponseDTO
@@ -50,7 +51,7 @@ class UserController(private val userService: UserService) {
                         content = [
                             Content(
                                     mediaType = "application/json",
-                                    schema = Schema(implementation = Error500ResponseDTO::class),
+                                    schema = Schema(implementation = ErrorResponseDTO::class),
                             ),
                         ],
                 ),
@@ -60,12 +61,14 @@ class UserController(private val userService: UserService) {
                         content = [
                             Content(
                                     mediaType = "application/json",
-                                    schema = Schema(implementation = Error500ResponseDTO::class),
+                                    schema = Schema(implementation = ErrorResponseDTO::class),
                             ),
                         ],
                 ),
             ],
     )
+    @Authenticated
+    @SecurityRequirement(name = OpenApiConfiguration.BEARER_AUTH_SECURITY_SCHEME_NAME)
     @GetMapping(value = ["/get/{id}"], produces = ["application/json"])
     fun getUserById(
             @Parameter(name = "id", description = "Идентификатор пользователя", required = true)
@@ -100,7 +103,7 @@ class UserController(private val userService: UserService) {
                         content = [
                             Content(
                                     mediaType = "application/json",
-                                    schema = Schema(implementation = Error500ResponseDTO::class),
+                                    schema = Schema(implementation = ErrorResponseDTO::class),
                             ),
                         ],
                 ),
@@ -108,7 +111,7 @@ class UserController(private val userService: UserService) {
                         responseCode = "503",
                         description = "Ошибка сервера",
                         content = [Content(mediaType = "application/json",
-                                schema = Schema(implementation = Error500ResponseDTO::class))],
+                                schema = Schema(implementation = ErrorResponseDTO::class))],
                 ),
             ],
     )

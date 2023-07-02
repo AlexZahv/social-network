@@ -1,0 +1,309 @@
+{
+	"info": {
+		"_postman_id": "c1be1a85-48d7-42bc-aa77-fedcd39914c2",
+		"name": "Otus",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "25699207"
+	},
+	"item": [
+		{
+			"name": "Register user",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"pm.collectionVariables.set('password', 'mrWorldWide')"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"// access response body\r",
+							"// use .json() for JSON responses\r",
+							"let resp = pm.response.json()\r",
+							"// set the response as a variable\r",
+							"pm.collectionVariables.set('user_id', resp.user_id)\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "accept",
+						"value": "application/json"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"first_name\": \"Фёдор\",\r\n  \"second_name\": \"Конюхов\",\r\n  \"sex\": \"MALE\",\r\n  \"age\": 65,\r\n  \"birthdate\": \"1958-07-02\",\r\n  \"biography\": \"Люблю ходить в кругосветку\",\r\n  \"city\": \"Москва\",\r\n  \"password\": \"{{password}}\"\r\n}"
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/user/user/register",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"user",
+						"user",
+						"register"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Login user",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"// access response body\r",
+							"// use .json() for JSON responses\r",
+							"let resp = pm.response.json()\r",
+							"// set the response as a variable\r",
+							"pm.collectionVariables.set('token', resp.token)\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "accept",
+						"value": "application/json"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"id\": \"{{user_id}}\",\r\n  \"password\": \"{{password}}\"\r\n}"
+				},
+				"url": {
+					"raw": "http://localhost:8080/login",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get user info",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "accept",
+						"value": "application/json"
+					},
+					{
+						"key": "Authorization",
+						"value": "Bearer {{token}}"
+					}
+				],
+				"url": {
+					"raw": "http://localhost:8080/api/user/get/{{user_id}}",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"user",
+						"get",
+						"{{user_id}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get user info 404 not found",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 404\", () => {\r",
+							"  pm.response.to.have.status(404);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "accept",
+						"value": "application/json"
+					},
+					{
+						"key": "Authorization",
+						"value": "Bearer {{token}}"
+					}
+				],
+				"url": {
+					"raw": "http://localhost:8080/api/user/get/invalid_user_id",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"user",
+						"get",
+						"invalid_user_id"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Login user Wrong password",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 400\", () => {\r",
+							"  pm.response.to.have.status(400);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Error message is presented\", () => {\r",
+							"    pm.expect(pm.response.json().message).to.be.equal('Невалидные данные');\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "accept",
+						"value": "application/json"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"id\": \"{{user_id}}\",\r\n  \"password\": \"WrongPassword\"\r\n}"
+				},
+				"url": {
+					"raw": "http://localhost:8080/login",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Login user Wrong userId",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 404\", () => {\r",
+							"  pm.response.to.have.status(404);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Error message is presented\", () => {\r",
+							"    pm.expect(pm.response.json().message).to.be.equal('Пользователь не найден');\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "accept",
+						"value": "application/json"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"id\": \"wrongUserID\",\r\n  \"password\": \"{{password}}\"\r\n}"
+				},
+				"url": {
+					"raw": "http://localhost:8080/login",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"login"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"variable": [
+		{
+			"key": "password",
+			"value": ""
+		},
+		{
+			"key": "userId",
+			"value": ""
+		},
+		{
+			"key": "user_id",
+			"value": ""
+		},
+		{
+			"key": "token",
+			"value": ""
+		}
+	]
+}

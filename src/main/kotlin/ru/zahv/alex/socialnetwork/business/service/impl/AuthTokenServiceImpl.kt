@@ -3,13 +3,13 @@ package ru.zahv.alex.socialnetwork.business.service.impl
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Service
 import ru.zahv.alex.socialnetwork.business.persistance.domain.AuthTokenEntity
-import ru.zahv.alex.socialnetwork.business.persistance.repository.AuthTokenRepository
+import ru.zahv.alex.socialnetwork.business.persistance.repository.plain.AuthTokenJDBCDao
 import ru.zahv.alex.socialnetwork.business.service.AuthTokenService
 import java.time.LocalDateTime
 import java.util.*
 
 @Service
-class AuthTokenServiceImpl(private val repository: AuthTokenRepository) : AuthTokenService {
+class AuthTokenServiceImpl(private val repository: AuthTokenJDBCDao) : AuthTokenService {
     companion object {
         const val DEFAULT_TOKEN_LIFETIME = 30L
     }
@@ -24,7 +24,7 @@ class AuthTokenServiceImpl(private val repository: AuthTokenRepository) : AuthTo
         token.expireDate = LocalDateTime.now().plusSeconds(tokenLifetime)
         token.userId = userId
         token.value = UUID.randomUUID().toString()
-        return repository.save(token)
+        return repository.insert(token)
     }
 
     override fun getToken(tokenValue: String): AuthTokenEntity? {

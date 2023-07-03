@@ -2,10 +2,7 @@ package ru.zahv.alex.socialnetwork.web.dto
 
 import com.fasterxml.jackson.annotation.JsonProperty
 import io.swagger.v3.oas.annotations.media.Schema
-import jakarta.persistence.EnumType
-import jakarta.persistence.Enumerated
 import org.springframework.format.annotation.DateTimeFormat
-import ru.zahv.alex.socialnetwork.business.enums.SexEnum
 import java.time.LocalDate
 
 data class UserResponseDTO(
@@ -25,10 +22,9 @@ data class UserResponseDTO(
         @JsonProperty("age")
         var age: Int? = null,
 
-        @Enumerated(EnumType.STRING)
         @Schema(name = "sex", example = "MALE", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
         @JsonProperty("sex")
-        var sex: SexEnum? = null,
+        var sex: String? = null,
 
         @Schema(name = "birthdate", example = "Wed Feb 01 03:00:00 MSK 2017", description = "Дата рождения", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
         @JsonProperty("birthdate")

@@ -32,3 +32,5 @@ auth:
   token:
     lifetime: 1000
 
+orm:
+  enabled: false

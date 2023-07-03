@@ -48,7 +48,7 @@
             </not>
         </preConditions>
         <createTable tableName="auth_tokens">
-            <column name="id" type="uuid">
+            <column name="id" type="varchar(50)">
                 <constraints primaryKey="true"/>
             </column>
             <column name="value" type="varchar(50)">

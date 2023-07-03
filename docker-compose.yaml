@@ -13,6 +13,20 @@ services:
       - postgres-db:/data/postgres
     ports:
       - "5432:5432"
+  social:
+    container_name: zahv_alex_social_network
+    image: zahvalex/otus-homework-1:0.0.1
+    environment:
+      DB_URL: postgres:5432/postgres
+      ORM_ENABLED: false
+      DB_PASSWORD: postgres
+      DB_USER: postgres
+    ports:
+      - "9093:8080"
+    depends_on:
+      - postgres
+    links:
+      - "postgres"
 
 
 volumes:

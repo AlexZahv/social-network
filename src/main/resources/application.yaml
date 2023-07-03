@@ -21,16 +21,16 @@ spring:
       maximumPoolSize: 20
       autoCommit: true
       leak-detection-threshold: 60000
-    url: jdbc:postgresql://localhost:5432/postgres
-    username: postgres
-    password: postgres
+    url: jdbc:postgresql://${DB_URL:localhost:5432/postgres}
+    username: ${DB_USER:postgres}
+    password: ${DB_PASSWORD:postgres}
   liquibase:
     change-log: classpath:db/changelog/db.changelog-master.xml
 
 # Token lifetime in seconds
 auth:
   token:
-    lifetime: 1000
+    lifetime: ${AUTH_TOKEN_LIFETIME:1000}
 
 orm:
-  enabled: false
+  enabled: ${ORM_ENABLED:false}

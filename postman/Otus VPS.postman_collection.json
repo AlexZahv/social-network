@@ -1,7 +1,7 @@
 {
 	"info": {
-		"_postman_id": "c1be1a85-48d7-42bc-aa77-fedcd39914c2",
-		"name": "Otus",
+		"_postman_id": "7e564f5d-b95d-4bce-945d-c3630ac597aa",
+		"name": "Otus VPS",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
 		"_exporter_id": "25699207"
 	},
@@ -50,10 +50,13 @@
 					"raw": "{\r\n  \"first_name\": \"Фёдор\",\r\n  \"second_name\": \"Конюхов\",\r\n  \"sex\": \"MALE\",\r\n  \"age\": 65,\r\n  \"birthdate\": \"1958-07-02\",\r\n  \"biography\": \"Люблю ходить в кругосветку\",\r\n  \"city\": \"Москва\",\r\n  \"password\": \"{{password}}\"\r\n}"
 				},
 				"url": {
-					"raw": "http://localhost:9093/api/user/user/register",
+					"raw": "http://45.141.102.177:9093/api/user/user/register",
 					"protocol": "http",
 					"host": [
-						"localhost"
+						"45",
+						"141",
+						"102",
+						"177"
 					],
 					"port": "9093",
 					"path": [
@@ -98,10 +101,13 @@
 					"raw": "{\r\n  \"id\": \"{{user_id}}\",\r\n  \"password\": \"{{password}}\"\r\n}"
 				},
 				"url": {
-					"raw": "http://localhost:9093/login",
+					"raw": "http://45.141.102.177:9093/login",
 					"protocol": "http",
 					"host": [
-						"localhost"
+						"45",
+						"141",
+						"102",
+						"177"
 					],
 					"port": "9093",
 					"path": [
@@ -143,10 +149,13 @@
 					}
 				],
 				"url": {
-					"raw": "http://localhost:9093/api/user/get/{{user_id}}",
+					"raw": "http://45.141.102.177:9093/api/user/get/{{user_id}}",
 					"protocol": "http",
 					"host": [
-						"localhost"
+						"45",
+						"141",
+						"102",
+						"177"
 					],
 					"port": "9093",
 					"path": [
@@ -187,10 +196,13 @@
 					}
 				],
 				"url": {
-					"raw": "http://localhost:9093/api/user/get/invalid_user_id",
+					"raw": "http://45.141.102.177:9093/api/user/get/invalid_user_id",
 					"protocol": "http",
 					"host": [
-						"localhost"
+						"45",
+						"141",
+						"102",
+						"177"
 					],
 					"port": "9093",
 					"path": [
@@ -239,10 +251,13 @@
 					"raw": "{\r\n  \"id\": \"{{user_id}}\",\r\n  \"password\": \"WrongPassword\"\r\n}"
 				},
 				"url": {
-					"raw": "http://localhost:9093/login",
+					"raw": "http://45.141.102.177:9093/login",
 					"protocol": "http",
 					"host": [
-						"localhost"
+						"45",
+						"141",
+						"102",
+						"177"
 					],
 					"port": "9093",
 					"path": [
@@ -288,10 +303,13 @@
 					"raw": "{\r\n  \"id\": \"wrongUserID\",\r\n  \"password\": \"{{password}}\"\r\n}"
 				},
 				"url": {
-					"raw": "http://localhost:9093/login",
+					"raw": "http://45.141.102.177:9093/login",
 					"protocol": "http",
 					"host": [
-						"localhost"
+						"45",
+						"141",
+						"102",
+						"177"
 					],
 					"port": "9093",
 					"path": [

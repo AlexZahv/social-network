@@ -50,7 +50,7 @@
 					"raw": "{\r\n  \"first_name\": \"Фёдор\",\r\n  \"second_name\": \"Конюхов\",\r\n  \"sex\": \"MALE\",\r\n  \"age\": 65,\r\n  \"birthdate\": \"1958-07-02\",\r\n  \"biography\": \"Люблю ходить в кругосветку\",\r\n  \"city\": \"Москва\",\r\n  \"password\": \"{{password}}\"\r\n}"
 				},
 				"url": {
-					"raw": "http://45.141.102.177:9093/api/user/user/register",
+					"raw": "http://45.141.102.177:9093/api/user/register",
 					"protocol": "http",
 					"host": [
 						"45",

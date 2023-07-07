@@ -115,7 +115,7 @@ class UserController(private val userService: UserService) {
                 ),
             ],
     )
-    @PostMapping(value = ["/user/register"], produces = ["application/json"], consumes = ["application/json"])
+    @PostMapping(value = ["/register"], produces = ["application/json"], consumes = ["application/json"])
     fun registerNewUser(
             @Parameter(name = "UserRegisterPostRequest", description = "")
             @RequestBody(required = true)

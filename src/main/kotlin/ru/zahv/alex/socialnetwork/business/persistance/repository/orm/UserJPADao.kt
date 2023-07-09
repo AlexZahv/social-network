@@ -2,6 +2,7 @@ package ru.zahv.alex.socialnetwork.business.persistance.repository.orm
 
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty
 import org.springframework.stereotype.Repository
+import org.springframework.transaction.annotation.Transactional
 import ru.zahv.alex.socialnetwork.business.persistance.domain.UserEntity
 import ru.zahv.alex.socialnetwork.business.persistance.repository.UserDao
 
@@ -12,10 +13,16 @@ class UserJPADao(private val userRepository: UserRepository) : UserDao {
         return userRepository.findFirstById(id)
     }
 
+    override fun findAllByFirstNameAndLastName(firstName: String, lastName: String): List<UserEntity>? {
+        return userRepository.findAllByFirstNameLikeAndSecondNameLike(firstName, lastName)
+    }
+
+    @Transactional
     override fun insert(userEntity: UserEntity): UserEntity {
         return userRepository.save(userEntity)
     }
 
+    @Transactional
     override fun update(userEntity: UserEntity): UserEntity {
         return userRepository.save(userEntity)
     }

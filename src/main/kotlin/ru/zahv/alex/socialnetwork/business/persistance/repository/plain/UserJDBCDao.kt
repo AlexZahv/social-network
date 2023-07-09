@@ -14,16 +14,15 @@ import java.sql.ResultSet
 import java.sql.SQLException
 import java.util.*
 
-
 @Repository
 @ConditionalOnProperty(name = ["orm.enabled"], havingValue = "false", matchIfMissing = true)
 class UserJDBCDao(private val jdbcTemplate: NamedParameterJdbcTemplate) : UserDao {
     override fun findFirstById(id: String): UserEntity? {
         val namedParameters: SqlParameterSource = MapSqlParameterSource().addValue("id", id)
         val userList = jdbcTemplate.query(
-                "SELECT * from users u where id = :id",
-                namedParameters,
-                UserRowMapper()
+            "SELECT * from users u where id = :id",
+            namedParameters,
+            UserRowMapper(),
         )
         if (userList.isNotEmpty()) {
             return userList[0]
@@ -37,10 +36,10 @@ class UserJDBCDao(private val jdbcTemplate: NamedParameterJdbcTemplate) : UserDa
         val namedParameters: SqlParameterSource = BeanPropertySqlParameterSource(userEntity)
         userEntity.id = UUID.randomUUID().toString()
         jdbcTemplate.update(
-                "insert into " +
-                        "users (id, first_name, second_name, birth_date, city, biography, sex, age, password) " +
-                        "values (:id, :firstName, :secondName, :birthdate, :city, :biography, :sex,:age, :password)",
-                namedParameters
+            "insert into " +
+                "users (id, first_name, second_name, birth_date, city, biography, sex, age, password) " +
+                "values (:id, :firstName, :secondName, :birthdate, :city, :biography, :sex,:age, :password)",
+            namedParameters,
         )
         return userEntity
     }
@@ -49,18 +48,35 @@ class UserJDBCDao(private val jdbcTemplate: NamedParameterJdbcTemplate) : UserDa
         val namedParameters: SqlParameterSource = BeanPropertySqlParameterSource(userEntity)
         userEntity.id = UUID.randomUUID().toString()
         jdbcTemplate.update(
-                "update users " +
-                        "set id=:id, " +
-                        "first_name=:firstName, " +
-                        "second_name=:secondName, " +
-                        "birth_date=:birthdate," +
-                        "city=:city," +
-                        "biography=:biography," +
-                        "age=:age," +
-                        "password:password",
-                namedParameters
+            "update users " +
+                "set id=:id, " +
+                "first_name=:firstName, " +
+                "second_name=:secondName, " +
+                "birth_date=:birthdate," +
+                "city=:city," +
+                "biography=:biography," +
+                "age=:age," +
+                "password:password",
+            namedParameters,
         )
         return userEntity
+    }
+
+    override fun findAllByFirstNameAndLastName(firstName: String, lastName: String): List<UserEntity>? {
+        val namedParameters: SqlParameterSource = MapSqlParameterSource()
+            .addValue("firstName", getLikePattern(firstName))
+            .addValue("secondName", getLikePattern(lastName))
+
+        return jdbcTemplate.query(
+            "SELECT * from users u where lower(first_name) like lower(:firstName) and lower(second_name) " +
+                "like lower(:secondName)",
+            namedParameters,
+            UserRowMapper(),
+        )
+    }
+
+    private fun getLikePattern(param: String): String {
+        return """%$param%"""
     }
 }
 

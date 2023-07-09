@@ -13,9 +13,9 @@ import ru.zahv.alex.socialnetwork.web.dto.UserResponseDTO
 
 @Service
 class UserServiceImpl(
-        private val userRepository: UserDao,
-        private val userMapper: UserMapper,
-        private val passwordEncoder: PasswordEncoder
+    private val userRepository: UserDao,
+    private val userMapper: UserMapper,
+    private val passwordEncoder: PasswordEncoder,
 ) : UserService {
     override fun registerUser(userRegisterRequestDTO: UserRegisterRequestDTO): UserRegisterResponseDTO {
         val entity = userMapper.mapToEntityFromDTO(userRegisterRequestDTO)
@@ -26,8 +26,13 @@ class UserServiceImpl(
 
     override fun getUserById(userId: String): UserResponseDTO {
         val entity = userRepository.findFirstById(userId)
-                ?: throw UserNotFoundException("Анкета не найдена")
+            ?: throw UserNotFoundException("Анкета не найдена")
         return userMapper.mapToResponseDTO(entity)
+    }
+
+    override fun searchUsersByFirstNameAndLastName(firstName: String, lastName: String): List<UserResponseDTO>? {
+        val userList = userRepository.findAllByFirstNameAndLastName(firstName, lastName) ?: emptyList()
+        return userList.map { userEntity -> userMapper.mapToResponseDTO(userEntity) }
     }
 
     override fun getUserByIdAndPassword(userId: String, password: String): UserResponseDTO {

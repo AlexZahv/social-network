@@ -181,6 +181,8 @@ class UserController(private val userService: UserService) {
         ],
     )
     @GetMapping(value = ["/user/search"], produces = ["application/json"])
+    @Authenticated
+    @SecurityRequirement(name = OpenApiConfiguration.BEARER_AUTH_SECURITY_SCHEME_NAME)
     fun userSearchGet(
         @NotNull
         @Parameter(name = "first_name", description = "Условие поиска по имени", required = true, `in` = ParameterIn.QUERY)

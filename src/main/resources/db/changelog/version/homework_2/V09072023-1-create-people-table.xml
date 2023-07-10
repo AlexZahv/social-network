@@ -1,0 +1,106 @@
+<?xml version="1.1" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                      http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+
+    <changeSet id="v09072023-1-create people table" author="azakhvalinskiy">
+        <preConditions onFail="MARK_RAN">
+            <and>
+                <sqlCheck expectedResult="1">
+                    <![CDATA[
+                        select
+                            case
+                                when count(*)<1000000 then 1
+                                else 0
+                            end
+                        from users
+                    ]]>
+                </sqlCheck>
+                <not>
+                    <tableExists tableName="people_import"/>
+                </not>
+            </and>
+        </preConditions>
+        <createTable tableName="people_import">
+            <column name="fio" type="varchar(200)"/>
+            <column name="age" type="int"/>
+            <column name="city" type="varchar(200)"/>
+        </createTable>
+    </changeSet>
+    <changeSet id="v09072023-1-fill people table" author="azakhvalinskiy">
+        <preConditions onFail="MARK_RAN">
+            <and>
+                <sqlCheck expectedResult="1">
+                    <![CDATA[
+                        select
+                            case
+                                when count(*)<1000000 then 1
+                                else 0
+                            end
+                        from users
+                    ]]>
+                </sqlCheck>
+                <tableExists tableName="people_import"/>
+                <sqlCheck expectedResult="0">
+                    select count(*) from people_import
+                </sqlCheck>
+            </and>
+        </preConditions>
+        <loadData tableName="people_import" file="csv/people.csv"/>
+    </changeSet>
+    <changeSet id="v09072023-1-fill users table" author="azakhvalinskiy">
+        <preConditions onFail="MARK_RAN">
+            <and>
+                <sqlCheck expectedResult="1">
+                    <![CDATA[
+                        select
+                            case
+                                when count(*)<1000000 then 1
+                                else 0
+                            end
+                        from users
+                    ]]>
+                </sqlCheck>
+                <tableExists tableName="people_import"/>
+            </and>
+        </preConditions>
+        <sql dbms="postgresql">
+            <![CDATA[
+                insert
+                    into
+                    users (id,
+                    first_name,
+                    second_name,
+                    sex,
+                    city,
+                    age,
+                    birth_date,
+                    biography,
+                    "password")
+
+                select
+                    gen_random_uuid (),
+                    split_part(fio, ' ', 2),
+                    split_part(fio, ' ', 1),
+                    'MALE',
+                    city,
+                    age,
+                    now() - interval '1 years' * age,
+                    'Люблю всё подряд',
+                    gen_random_uuid ()
+                from
+                    people_import pi2
+            ]]>
+        </sql>
+    </changeSet>
+    <changeSet id="v09072023-1-drop temp people table" author="azakhvalinskiy">
+        <preConditions onFail="MARK_RAN">
+            <and>
+                <tableExists tableName="people_import"/>
+            </and>
+        </preConditions>
+        <dropTable tableName="people_import"/>
+    </changeSet>
+</databaseChangeLog>

@@ -14,7 +14,7 @@ class UserJPADao(private val userRepository: UserRepository) : UserDao {
     }
 
     override fun findAllByFirstNameAndLastName(firstName: String, lastName: String): List<UserEntity>? {
-        return userRepository.findAllByFirstNameLikeAndSecondNameLike(firstName, lastName)
+        return userRepository.findAllByFirstNameLikeAndSecondNameLikeOrderByIdDesc(firstName, lastName)
     }
 
     @Transactional

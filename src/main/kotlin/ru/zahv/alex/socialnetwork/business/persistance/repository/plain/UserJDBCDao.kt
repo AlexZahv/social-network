@@ -69,7 +69,7 @@ class UserJDBCDao(private val jdbcTemplate: NamedParameterJdbcTemplate) : UserDa
 
         return jdbcTemplate.query(
             "SELECT * from users u where lower(first_name) like lower(:firstName) and lower(second_name) " +
-                "like lower(:secondName)",
+                "like lower(:secondName) order by id desc",
             namedParameters,
             UserRowMapper(),
         )

@@ -8,5 +8,5 @@ import ru.zahv.alex.socialnetwork.business.persistance.domain.UserEntity
 interface UserRepository : CrudRepository<UserEntity, String> {
     fun findFirstById(id: String): UserEntity?
 
-    fun findAllByFirstNameLikeAndSecondNameLike(firstName: String, secondName: String): List<UserEntity>?
+    fun findAllByFirstNameLikeAndSecondNameLikeOrderByIdDesc(firstName: String, secondName: String): List<UserEntity>?
 }

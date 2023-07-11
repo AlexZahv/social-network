@@ -180,7 +180,7 @@ class UserController(private val userService: UserService) {
             ),
         ],
     )
-    @GetMapping(value = ["/user/search"], produces = ["application/json"])
+    @GetMapping(value = ["/search"], produces = ["application/json"])
     @Authenticated
     @SecurityRequirement(name = OpenApiConfiguration.BEARER_AUTH_SECURITY_SCHEME_NAME)
     fun userSearchGet(

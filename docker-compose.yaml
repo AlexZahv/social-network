@@ -15,7 +15,7 @@ services:
       - "5432:5432"
   social:
     container_name: zahv_alex_social_network
-    image: zahvalex/otus-homework-1:0.0.1
+    image: zahvalex/otus-homework-1:monitoring
     environment:
       DB_URL: postgres:5432/postgres
       ORM_ENABLED: false
@@ -23,6 +23,19 @@ services:
       DB_USER: postgres
     ports:
       - "9093:8080"
+    depends_on:
+      - postgres
+    links:
+      - "postgres"
+  postgres-exporter-pgserver94:
+    image: wrouesnel/postgres_exporter:latest
+    deploy:
+      mode: replicated
+      replicas: 1
+    ports:
+      - "9187:9187"
+    environment:
+      - DATA_SOURCE_NAME=postgresql://postgres:5432/postgres?sslmode=disable
     depends_on:
       - postgres
     links:

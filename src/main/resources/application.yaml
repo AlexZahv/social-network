@@ -1,4 +1,6 @@
 spring:
+  application:
+    name: otus-social-network
   main:
     allow-bean-definition-overriding: true
   jpa:
@@ -33,3 +35,9 @@ auth:
 
 orm:
   enabled: ${ORM_ENABLED:false}
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"

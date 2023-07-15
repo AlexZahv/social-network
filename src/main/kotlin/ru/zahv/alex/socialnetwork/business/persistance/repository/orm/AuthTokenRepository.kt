@@ -12,15 +12,17 @@ import java.util.*
 @Repository
 interface AuthTokenRepository : CrudRepository<AuthTokenEntity, UUID> {
     fun findFirstByUserIdAndExpireDateGreaterThan(
-            userId: String,
-            date: LocalDateTime? = LocalDateTime.now()
+        userId: String,
+        date: LocalDateTime? = LocalDateTime.now(),
     ): AuthTokenEntity?
 
     @Transactional
     @Modifying
-    @Query("update AuthTokenEntity a set a.expireDate = ?2 where a.userId = ?1 and a.expireDate>?2", )
-    fun updateAllByUserIdAndExpireDate(userId: String,
-                                       date: LocalDateTime? = LocalDateTime.now())
+    @Query("update AuthTokenEntity a set a.expireDate = ?2 where a.userId = ?1 and a.expireDate>?2")
+    fun updateAllByUserIdAndExpireDate(
+        userId: String,
+        date: LocalDateTime? = LocalDateTime.now(),
+    )
 
     fun findFirstByValue(value: String): AuthTokenEntity?
 }

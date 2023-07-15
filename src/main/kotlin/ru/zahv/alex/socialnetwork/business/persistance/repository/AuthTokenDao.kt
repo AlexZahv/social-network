@@ -5,12 +5,14 @@ import java.time.LocalDateTime
 
 interface AuthTokenDao {
     fun findFirstByUserIdAndExpireDateGreaterThan(
-            userId: String,
-            date: LocalDateTime? = LocalDateTime.now()
+        userId: String,
+        date: LocalDateTime? = LocalDateTime.now(),
     ): AuthTokenEntity?
 
-    fun updateAllByUserIdAndExpireDate(userId: String,
-                                       date: LocalDateTime? = LocalDateTime.now())
+    fun updateAllByUserIdAndExpireDate(
+        userId: String,
+        date: LocalDateTime? = LocalDateTime.now(),
+    )
 
     fun findFirstByValue(value: String): AuthTokenEntity?
 

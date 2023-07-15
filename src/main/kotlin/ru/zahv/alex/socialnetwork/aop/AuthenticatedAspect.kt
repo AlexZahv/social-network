@@ -11,7 +11,6 @@ import ru.zahv.alex.socialnetwork.business.service.AuthTokenService
 import java.time.LocalDateTime
 import java.util.regex.Pattern
 
-
 @Aspect
 @Component
 class AuthenticatedAspect(val authTokenService: AuthTokenService) {

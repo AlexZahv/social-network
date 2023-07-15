@@ -5,12 +5,12 @@ import java.time.LocalDateTime
 
 @Entity
 @Table(name = "auth_tokens")
-data class AuthTokenEntity (
+data class AuthTokenEntity(
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     var id: String? = null,
     var value: String? = null,
     var issueDate: LocalDateTime? = null,
     var expireDate: LocalDateTime? = null,
-    var userId: String? = null
+    var userId: String? = null,
 )

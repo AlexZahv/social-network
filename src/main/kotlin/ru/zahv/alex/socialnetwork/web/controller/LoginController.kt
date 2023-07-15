@@ -31,25 +31,25 @@ class LoginController(val authService: AuthService) {
      * or Ошибка сервера (status code 503)
      */
     @Operation(
-            operationId = "loginPost",
-            responses = [
-                ApiResponse(responseCode = "200", description = "Успешная аутентификация", content = [Content(mediaType = "application/json", schema = Schema(implementation = LoginResponseDTO::class))]),
-                ApiResponse(responseCode = "400", description = "Невалидные данные"),
-                ApiResponse(responseCode = "404", description = "Пользователь не найден"),
-                ApiResponse(responseCode = "500", description = "Ошибка сервера", content = [Content(mediaType = "application/json", schema = Schema(implementation = ErrorResponseDTO::class))]),
-                ApiResponse(responseCode = "503", description = "Ошибка сервера", content = [Content(mediaType = "application/json", schema = Schema(implementation = ErrorResponseDTO::class))]),
-            ],
+        operationId = "loginPost",
+        responses = [
+            ApiResponse(responseCode = "200", description = "Успешная аутентификация", content = [Content(mediaType = "application/json", schema = Schema(implementation = LoginResponseDTO::class))]),
+            ApiResponse(responseCode = "400", description = "Невалидные данные"),
+            ApiResponse(responseCode = "404", description = "Пользователь не найден"),
+            ApiResponse(responseCode = "500", description = "Ошибка сервера", content = [Content(mediaType = "application/json", schema = Schema(implementation = ErrorResponseDTO::class))]),
+            ApiResponse(responseCode = "503", description = "Ошибка сервера", content = [Content(mediaType = "application/json", schema = Schema(implementation = ErrorResponseDTO::class))]),
+        ],
     )
     @PostMapping(
-            value = ["/login"],
-            produces = ["application/json"],
-            consumes = ["application/json"],
+        value = ["/login"],
+        produces = ["application/json"],
+        consumes = ["application/json"],
     )
     fun loginPost(
-            @Parameter(name = "LoginRequestDTO", description = "Данные для авторизации")
-            @RequestBody(required = true)
-            @Valid
-            loginRequestDTO: LoginRequestDTO,
+        @Parameter(name = "LoginRequestDTO", description = "Данные для авторизации")
+        @RequestBody(required = true)
+        @Valid
+        loginRequestDTO: LoginRequestDTO,
     ): ResponseEntity<LoginResponseDTO?>? {
         return ResponseEntity.ok(authService.login(loginRequestDTO))
     }

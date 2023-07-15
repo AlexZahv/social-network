@@ -20,12 +20,12 @@ import java.util.*
 class AuthTokenJDBCDao(private val jdbcTemplate: NamedParameterJdbcTemplate) : AuthTokenDao {
     override fun findFirstByUserIdAndExpireDateGreaterThan(userId: String, date: LocalDateTime?): AuthTokenEntity? {
         val namedParameters: SqlParameterSource = MapSqlParameterSource()
-                .addValue("userId", userId)
-                .addValue("date", date)
+            .addValue("userId", userId)
+            .addValue("date", date)
         val tokenList = jdbcTemplate.query(
-                "SELECT * from auth_tokens where user_id = :userId and expire_date >= :date order by expire_date desc",
-                namedParameters,
-                TokenRowMapper()
+            "SELECT * from auth_tokens where user_id = :userId and expire_date >= :date order by expire_date desc",
+            namedParameters,
+            TokenRowMapper(),
         )
         if (tokenList.isNotEmpty()) {
             return tokenList[0]
@@ -35,20 +35,20 @@ class AuthTokenJDBCDao(private val jdbcTemplate: NamedParameterJdbcTemplate) : A
 
     override fun updateAllByUserIdAndExpireDate(userId: String, date: LocalDateTime?) {
         val namedParameters: SqlParameterSource = MapSqlParameterSource()
-                .addValue("userId", userId)
-                .addValue("date", date)
+            .addValue("userId", userId)
+            .addValue("date", date)
         jdbcTemplate.update(
-                "update auth_tokens set expire_date=:date where expire_date >:date and user_id=:userId",
-                namedParameters
+            "update auth_tokens set expire_date=:date where expire_date >:date and user_id=:userId",
+            namedParameters,
         )
     }
 
     override fun findFirstByValue(value: String): AuthTokenEntity? {
         val namedParameters: SqlParameterSource = MapSqlParameterSource().addValue("value", value)
         val tokenList = jdbcTemplate.query(
-                "SELECT * from auth_tokens where value = :value",
-                namedParameters,
-                TokenRowMapper()
+            "SELECT * from auth_tokens where value = :value",
+            namedParameters,
+            TokenRowMapper(),
         )
         if (tokenList.isNotEmpty()) {
             return tokenList[0]
@@ -60,10 +60,10 @@ class AuthTokenJDBCDao(private val jdbcTemplate: NamedParameterJdbcTemplate) : A
         val namedParameters: SqlParameterSource = BeanPropertySqlParameterSource(authTokenEntity)
         authTokenEntity.id = UUID.randomUUID().toString()
         jdbcTemplate.update(
-                "insert into " +
-                        "auth_tokens (id, user_id, value, expire_date, issue_date) " +
-                        "values (:id, :userId, :value, :expireDate, :issueDate)",
-                namedParameters
+            "insert into " +
+                "auth_tokens (id, user_id, value, expire_date, issue_date) " +
+                "values (:id, :userId, :value, :expireDate, :issueDate)",
+            namedParameters,
         )
         return authTokenEntity
     }
@@ -72,13 +72,13 @@ class AuthTokenJDBCDao(private val jdbcTemplate: NamedParameterJdbcTemplate) : A
         val namedParameters: SqlParameterSource = BeanPropertySqlParameterSource(authTokenEntity)
         authTokenEntity.id = UUID.randomUUID().toString()
         jdbcTemplate.update(
-                "update auth_tokens set" +
-                        "user_id=:userId, " +
-                        "value=:value, " +
-                        "expire_date=:expireDate, " +
-                        "issue_date=:issueDate" +
-                        "where id:=id",
-                namedParameters
+            "update auth_tokens set" +
+                "user_id=:userId, " +
+                "value=:value, " +
+                "expire_date=:expireDate, " +
+                "issue_date=:issueDate" +
+                "where id:=id",
+            namedParameters,
         )
         return authTokenEntity
     }
@@ -95,5 +95,4 @@ class TokenRowMapper : RowMapper<AuthTokenEntity> {
         tokenEntity.issueDate = convertSqlDateToLocalDateTime(rs.getTimestamp("ISSUE_DATE"))
         return tokenEntity
     }
-
 }

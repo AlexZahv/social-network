@@ -97,7 +97,10 @@ class UserController(private val userService: UserService) {
             ApiResponse(
                 responseCode = "200",
                 description = "Успешная регистрация",
-                content = [Content(mediaType = "application/json", schema = Schema(implementation = UserRegisterResponseDTO::class))],
+                content = [Content(
+                    mediaType = "application/json",
+                    schema = Schema(implementation = UserRegisterResponseDTO::class)
+                )],
             ),
             ApiResponse(responseCode = "400", description = "Невалидные данные"),
             ApiResponse(
@@ -185,11 +188,21 @@ class UserController(private val userService: UserService) {
     @SecurityRequirement(name = OpenApiConfiguration.BEARER_AUTH_SECURITY_SCHEME_NAME)
     fun userSearchGet(
         @NotNull
-        @Parameter(name = "first_name", description = "Условие поиска по имени", required = true, `in` = ParameterIn.QUERY)
+        @Parameter(
+            name = "first_name",
+            description = "Условие поиска по имени",
+            required = true,
+            `in` = ParameterIn.QUERY
+        )
         @RequestParam(value = "first_name", required = true)
         firstName: String,
         @NotNull
-        @Parameter(name = "last_name", description = "Условие поиска по фамилии", required = true, `in` = ParameterIn.QUERY)
+        @Parameter(
+            name = "last_name",
+            description = "Условие поиска по фамилии",
+            required = true,
+            `in` = ParameterIn.QUERY
+        )
         @RequestParam(value = "last_name", required = true)
         lastName: String,
     ): ResponseEntity<List<UserResponseDTO>>? {

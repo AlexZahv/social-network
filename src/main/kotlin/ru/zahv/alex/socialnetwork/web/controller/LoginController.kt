@@ -33,11 +33,32 @@ class LoginController(val authService: AuthService) {
     @Operation(
         operationId = "loginPost",
         responses = [
-            ApiResponse(responseCode = "200", description = "Успешная аутентификация", content = [Content(mediaType = "application/json", schema = Schema(implementation = LoginResponseDTO::class))]),
+            ApiResponse(
+                responseCode = "200",
+                description = "Успешная аутентификация",
+                content = [Content(
+                    mediaType = "application/json",
+                    schema = Schema(implementation = LoginResponseDTO::class)
+                )]
+            ),
             ApiResponse(responseCode = "400", description = "Невалидные данные"),
             ApiResponse(responseCode = "404", description = "Пользователь не найден"),
-            ApiResponse(responseCode = "500", description = "Ошибка сервера", content = [Content(mediaType = "application/json", schema = Schema(implementation = ErrorResponseDTO::class))]),
-            ApiResponse(responseCode = "503", description = "Ошибка сервера", content = [Content(mediaType = "application/json", schema = Schema(implementation = ErrorResponseDTO::class))]),
+            ApiResponse(
+                responseCode = "500",
+                description = "Ошибка сервера",
+                content = [Content(
+                    mediaType = "application/json",
+                    schema = Schema(implementation = ErrorResponseDTO::class)
+                )]
+            ),
+            ApiResponse(
+                responseCode = "503",
+                description = "Ошибка сервера",
+                content = [Content(
+                    mediaType = "application/json",
+                    schema = Schema(implementation = ErrorResponseDTO::class)
+                )]
+            ),
         ],
     )
     @PostMapping(

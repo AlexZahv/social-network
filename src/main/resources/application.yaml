@@ -27,6 +27,8 @@ spring:
     password: ${DB_PASSWORD:postgres}
   liquibase:
     change-log: classpath:db/changelog/db.changelog-master.xml
+  mvc:
+    dispatch-options-request: true
 
 # Token lifetime in seconds
 auth:

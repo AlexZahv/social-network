@@ -46,7 +46,7 @@ class AuthTokenJDBCDao(private val jdbcTemplate: NamedParameterJdbcTemplate) : A
     override fun findFirstByValue(value: String): AuthTokenEntity? {
         val namedParameters: SqlParameterSource = MapSqlParameterSource().addValue("value", value)
         val tokenList = jdbcTemplate.query(
-            "SELECT * from auth_tokens where value = :value",
+            "SELECT * from auth_tokens where id = :value",
             namedParameters,
             TokenRowMapper(),
         )
@@ -61,8 +61,8 @@ class AuthTokenJDBCDao(private val jdbcTemplate: NamedParameterJdbcTemplate) : A
         authTokenEntity.id = UUID.randomUUID().toString()
         jdbcTemplate.update(
             "insert into " +
-                "auth_tokens (id, user_id, value, expire_date, issue_date) " +
-                "values (:id, :userId, :value, :expireDate, :issueDate)",
+                "auth_tokens (id, user_id, expire_date, issue_date) " +
+                "values (:id, :userId, :expireDate, :issueDate)",
             namedParameters,
         )
         return authTokenEntity
@@ -89,7 +89,6 @@ class TokenRowMapper : RowMapper<AuthTokenEntity> {
     override fun mapRow(rs: ResultSet, rowNum: Int): AuthTokenEntity {
         val tokenEntity = AuthTokenEntity()
         tokenEntity.id = rs.getString("ID")
-        tokenEntity.value = rs.getString("VALUE")
         tokenEntity.userId = rs.getString("USER_ID")
         tokenEntity.expireDate = convertSqlDateToLocalDateTime(rs.getTimestamp("EXPIRE_DATE"))
         tokenEntity.issueDate = convertSqlDateToLocalDateTime(rs.getTimestamp("ISSUE_DATE"))

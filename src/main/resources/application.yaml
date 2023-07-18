@@ -19,8 +19,8 @@ spring:
     driverClassName: org.postgresql.Driver
     hikari:
       connectionTimeout: 20000
-      minimumIdle: 5
-      maximumPoolSize: 20
+      minimumIdle: 10
+      maximumPoolSize: 70
       autoCommit: true
     url: jdbc:postgresql://${DB_URL:localhost:5432/postgres}
     username: ${DB_USER:postgres}

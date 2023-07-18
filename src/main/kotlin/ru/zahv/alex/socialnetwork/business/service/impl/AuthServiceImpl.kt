@@ -15,6 +15,6 @@ class AuthServiceImpl(
     override fun login(loginRequestDTO: LoginRequestDTO): LoginResponseDTO {
         val userInfo = userService.getUserByIdAndPassword(loginRequestDTO.id, loginRequestDTO.password)
         val tokenEntity = tokenService.createToken(userInfo.id!!)
-        return LoginResponseDTO(tokenEntity.value)
+        return LoginResponseDTO(tokenEntity.id)
     }
 }

@@ -23,7 +23,6 @@ class AuthTokenServiceImpl(private val repository: AuthTokenJDBCDao) : AuthToken
         token.issueDate = LocalDateTime.now()
         token.expireDate = LocalDateTime.now().plusSeconds(tokenLifetime)
         token.userId = userId
-        token.value = UUID.randomUUID().toString()
         return repository.insert(token)
     }
 

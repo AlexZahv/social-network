@@ -24,5 +24,5 @@ interface AuthTokenRepository : CrudRepository<AuthTokenEntity, UUID> {
         date: LocalDateTime? = LocalDateTime.now(),
     )
 
-    fun findFirstByValue(value: String): AuthTokenEntity?
+    fun findFirstById(value: String): AuthTokenEntity?
 }

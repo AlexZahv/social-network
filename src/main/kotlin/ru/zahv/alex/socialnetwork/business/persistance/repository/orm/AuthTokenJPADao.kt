@@ -18,7 +18,7 @@ class AuthTokenJPADao(private val authTokenRepository: AuthTokenRepository) : Au
     }
 
     override fun findFirstByValue(value: String): AuthTokenEntity? {
-        return authTokenRepository.findFirstByValue(value)
+        return authTokenRepository.findFirstById(value)
     }
 
     override fun insert(authTokenEntity: AuthTokenEntity): AuthTokenEntity {

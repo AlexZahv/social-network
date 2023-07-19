@@ -68,15 +68,15 @@ class UserJDBCDao(private val jdbcTemplate: NamedParameterJdbcTemplate) : UserDa
             .addValue("secondName", getLikePattern(lastName))
 
         return jdbcTemplate.query(
-            "SELECT * from users u where lower(first_name) like lower(:firstName) and lower(second_name) " +
-                "like lower(:secondName) order by id desc",
+            "SELECT * from users u where second_name like :secondName and first_name like :firstName " +
+                " order by id desc",
             namedParameters,
             UserRowMapper(),
         )
     }
 
     private fun getLikePattern(param: String): String {
-        return """%$param%"""
+        return """$param%"""
     }
 }
 

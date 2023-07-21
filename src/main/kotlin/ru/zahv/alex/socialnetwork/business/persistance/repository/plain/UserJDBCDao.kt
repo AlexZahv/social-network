@@ -1,5 +1,6 @@
 package ru.zahv.alex.socialnetwork.business.persistance.repository.plain
 
+import org.springframework.beans.factory.annotation.Qualifier
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty
 import org.springframework.jdbc.core.RowMapper
 import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource
@@ -16,10 +17,13 @@ import java.util.*
 
 @Repository
 @ConditionalOnProperty(name = ["orm.enabled"], havingValue = "false", matchIfMissing = true)
-class UserJDBCDao(private val jdbcTemplate: NamedParameterJdbcTemplate) : UserDao {
+class UserJDBCDao(
+    @Qualifier("masterTemplate") private val masterTemplate: NamedParameterJdbcTemplate,
+    @Qualifier("slaveTemplate") private val slaveTemplate: NamedParameterJdbcTemplate,
+) : UserDao {
     override fun findFirstById(id: String): UserEntity? {
         val namedParameters: SqlParameterSource = MapSqlParameterSource().addValue("id", id)
-        val userList = jdbcTemplate.query(
+        val userList = masterTemplate.query(
             "SELECT * from users u where id = :id",
             namedParameters,
             UserRowMapper(),
@@ -35,7 +39,7 @@ class UserJDBCDao(private val jdbcTemplate: NamedParameterJdbcTemplate) : UserDa
     override fun insert(userEntity: UserEntity): UserEntity {
         val namedParameters: SqlParameterSource = BeanPropertySqlParameterSource(userEntity)
         userEntity.id = UUID.randomUUID().toString()
-        jdbcTemplate.update(
+        masterTemplate.update(
             "insert into " +
                 "users (id, first_name, second_name, birth_date, city, biography, sex, age, password) " +
                 "values (:id, :firstName, :secondName, :birthdate, :city, :biography, :sex,:age, :password)",
@@ -47,7 +51,7 @@ class UserJDBCDao(private val jdbcTemplate: NamedParameterJdbcTemplate) : UserDa
     override fun update(userEntity: UserEntity): UserEntity {
         val namedParameters: SqlParameterSource = BeanPropertySqlParameterSource(userEntity)
         userEntity.id = UUID.randomUUID().toString()
-        jdbcTemplate.update(
+        masterTemplate.update(
             "update users " +
                 "set id=:id, " +
                 "first_name=:firstName, " +
@@ -67,7 +71,7 @@ class UserJDBCDao(private val jdbcTemplate: NamedParameterJdbcTemplate) : UserDa
             .addValue("firstName", getLikePattern(firstName))
             .addValue("secondName", getLikePattern(lastName))
 
-        return jdbcTemplate.query(
+        return masterTemplate.query(
             "SELECT * from users u where second_name like :secondName and first_name like :firstName " +
                 " order by id desc",
             namedParameters,

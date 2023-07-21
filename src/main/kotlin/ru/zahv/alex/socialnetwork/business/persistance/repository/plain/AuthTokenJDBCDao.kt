@@ -1,5 +1,6 @@
 package ru.zahv.alex.socialnetwork.business.persistance.repository.plain
 
+import org.springframework.beans.factory.annotation.Qualifier
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty
 import org.springframework.jdbc.core.RowMapper
 import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource
@@ -17,7 +18,7 @@ import java.util.*
 
 @Repository
 @ConditionalOnProperty(name = ["orm.enabled"], havingValue = "false", matchIfMissing = true)
-class AuthTokenJDBCDao(private val jdbcTemplate: NamedParameterJdbcTemplate) : AuthTokenDao {
+class AuthTokenJDBCDao(@Qualifier("masterTemplate") private val jdbcTemplate: NamedParameterJdbcTemplate) : AuthTokenDao {
     override fun findFirstByUserIdAndExpireDateGreaterThan(userId: String, date: LocalDateTime?): AuthTokenEntity? {
         val namedParameters: SqlParameterSource = MapSqlParameterSource()
             .addValue("userId", userId)

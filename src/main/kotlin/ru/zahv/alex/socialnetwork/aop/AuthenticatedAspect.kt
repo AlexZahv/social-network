@@ -8,6 +8,7 @@ import org.springframework.web.context.request.RequestContextHolder
 import org.springframework.web.context.request.ServletRequestAttributes
 import ru.zahv.alex.socialnetwork.business.exceptions.CustomAuthorizationException
 import ru.zahv.alex.socialnetwork.business.service.AuthTokenService
+import ru.zahv.alex.socialnetwork.utils.SecurityContextHolder
 import java.time.LocalDateTime
 import java.util.regex.Pattern
 
@@ -28,17 +29,19 @@ class AuthenticatedAspect(val authTokenService: AuthTokenService) {
             val matcher = bearerPattern.matcher(authHeader)
             if (matcher.find()) {
                 val token = matcher.group(1)
-                if (!checkAuthTokenIsValid(token)) {
-                    throw CustomAuthorizationException("Ошибка авторизации. Токен доступа невалиден.")
-                }
+                checkAuthTokenIsValid(token)
             }
         } else {
             throw CustomAuthorizationException("Ошибка авторизации. Токен доступа не получен.")
         }
     }
 
-    private fun checkAuthTokenIsValid(authToken: String): Boolean {
+    private fun checkAuthTokenIsValid(authToken: String) {
         val storedToken = authTokenService.getToken(authToken)
-        return storedToken != null && LocalDateTime.now().isBefore(storedToken.expireDate)
+        if (storedToken == null || !LocalDateTime.now().isBefore(storedToken.expireDate)) {
+            throw CustomAuthorizationException("Ошибка авторизации. Токен доступа невалиден.")
+        } else {
+            SecurityContextHolder.storeCurrentUser(storedToken.userId!!)
+        }
     }
 }

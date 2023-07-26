@@ -1,0 +1,32 @@
+<?xml version="1.1" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                      http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+
+    <changeSet id="V026072023-1-create-friendship-table" author="azakhvalinskiy">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="friendship"/>
+            </not>
+        </preConditions>
+        <createTable tableName="friendship">
+            <column name="user_id" type="varchar(50)">
+                <constraints foreignKeyName="friendship_user_fk"
+                             nullable="false"
+                             referencedTableName="users"
+                             referencedColumnNames="id"/>
+            </column>
+            <column name="friend_id" type="varchar(50)">
+                <constraints foreignKeyName="friendship_friend_fk"
+                             nullable="false"
+                             referencedTableName="users"
+                             referencedColumnNames="id"/>
+            </column>
+        </createTable>
+        <addPrimaryKey tableName="friendship" columnNames="user_id, friend_id" constraintName="friendship_pk"/>
+        <addUniqueConstraint tableName="friendship" columnNames="user_id, friend_id"
+                             constraintName="friendship_unique"/>
+    </changeSet>
+</databaseChangeLog>

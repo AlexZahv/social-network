@@ -23,7 +23,7 @@ class UserJDBCDao(
 ) : UserDao {
     override fun findFirstById(id: String): UserEntity? {
         val namedParameters: SqlParameterSource = MapSqlParameterSource().addValue("id", id)
-        val userList = masterTemplate.query(
+        val userList = slaveTemplate.query(
             "SELECT * from users u where id = :id",
             namedParameters,
             UserRowMapper(),
@@ -71,7 +71,7 @@ class UserJDBCDao(
             .addValue("firstName", getLikePattern(firstName))
             .addValue("secondName", getLikePattern(lastName))
 
-        return masterTemplate.query(
+        return slaveTemplate.query(
             "SELECT * from users u where second_name like :secondName and first_name like :firstName " +
                 " order by id desc",
             namedParameters,

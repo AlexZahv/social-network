@@ -11,14 +11,15 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement
 import io.swagger.v3.oas.annotations.tags.Tag
 import jakarta.validation.Valid
 import jakarta.validation.constraints.DecimalMin
-import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.validation.annotation.Validated
 import org.springframework.web.bind.annotation.*
 import ru.zahv.alex.socialnetwork.aop.Authenticated
+import ru.zahv.alex.socialnetwork.business.service.PostService
 import ru.zahv.alex.socialnetwork.config.OpenApiConfiguration
 import ru.zahv.alex.socialnetwork.web.dto.ErrorResponseDTO
 import ru.zahv.alex.socialnetwork.web.dto.posts.PostCreateRequestDTO
+import ru.zahv.alex.socialnetwork.web.dto.posts.PostCreateResponseDTO
 import ru.zahv.alex.socialnetwork.web.dto.posts.PostResponseDTO
 import ru.zahv.alex.socialnetwork.web.dto.posts.PostUpdateRequestDTO
 import java.math.BigDecimal
@@ -27,7 +28,7 @@ import java.math.BigDecimal
 @Tag(name = "post", description = "the post API")
 @RestController("post")
 @RequestMapping
-class PostController {
+class PostController(val postService: PostService) {
     /**
      * POST /post/create
      *
@@ -74,9 +75,9 @@ class PostController {
         @Parameter(
             name = "PostCreatePostRequest",
             description = ""
-        ) @Valid @RequestBody(required = false) postCreatePostRequest: PostCreateRequestDTO?
-    ): ResponseEntity<String?>? {
-        return ResponseEntity(HttpStatus.NOT_IMPLEMENTED)
+        ) @Valid @RequestBody(required = true) postCreatePostRequest: PostCreateRequestDTO
+    ): ResponseEntity<PostCreateResponseDTO> {
+        return ResponseEntity.ok(PostCreateResponseDTO(postService.createPost(postCreatePostRequest)))
     }
 
 
@@ -91,7 +92,7 @@ class PostController {
      * or Ошибка сервера (status code 503)
      */
     @Operation(
-        operationId = "postDeleteIdPut",
+        operationId = "postDeleteId",
         responses = [ApiResponse(
             responseCode = "200",
             description = "Успешно удален пост"
@@ -114,7 +115,7 @@ class PostController {
             )]
         )]
     )
-    @PutMapping(value = ["/delete/{id}"], produces = ["application/json"])
+    @DeleteMapping(value = ["/delete/{id}"], produces = ["application/json"])
     @Authenticated
     @SecurityRequirement(name = OpenApiConfiguration.BEARER_AUTH_SECURITY_SCHEME_NAME)
     fun postDeleteIdPut(
@@ -123,9 +124,10 @@ class PostController {
             description = "",
             required = true,
             `in` = ParameterIn.PATH
-        ) @PathVariable("id") id: String?
-    ): ResponseEntity<Void?>? {
-        return ResponseEntity(HttpStatus.NOT_IMPLEMENTED)
+        ) @PathVariable("id") id: String
+    ): ResponseEntity<Void>? {
+        postService.deletePost(id)
+        return ResponseEntity.ok().build()
     }
 
 
@@ -176,14 +178,14 @@ class PostController {
             value = "offset",
             required = false,
             defaultValue = "0"
-        ) offset: BigDecimal?,
+        ) offset: BigDecimal,
         @DecimalMin("1") @Parameter(name = "limit", description = "", `in` = ParameterIn.QUERY) @Valid @RequestParam(
             value = "limit",
             required = false,
             defaultValue = "10"
-        ) limit: BigDecimal?
-    ): ResponseEntity<List<PostResponseDTO?>> {
-        return ResponseEntity<List<PostResponseDTO?>>(HttpStatus.NOT_IMPLEMENTED)
+        ) limit: BigDecimal
+    ): ResponseEntity<List<PostResponseDTO>> {
+        return ResponseEntity.ok(postService.getPostFeed(offset, limit))
     }
 
 
@@ -234,9 +236,9 @@ class PostController {
             description = "",
             required = true,
             `in` = ParameterIn.PATH
-        ) @PathVariable("id") id: String?
+        ) @PathVariable("id") id: String
     ): ResponseEntity<PostResponseDTO?> {
-        return ResponseEntity<PostResponseDTO?>(HttpStatus.NOT_IMPLEMENTED)
+        return ResponseEntity.ok(postService.getPost(id))
     }
 
 
@@ -285,8 +287,9 @@ class PostController {
         @Parameter(
             name = "PostUpdatePutRequest",
             description = ""
-        ) @Valid @RequestBody(required = false) postUpdatePutRequest: PostUpdateRequestDTO?
-    ): ResponseEntity<Void?>? {
-        return ResponseEntity(HttpStatus.NOT_IMPLEMENTED)
+        ) @Valid @RequestBody(required = true) postUpdatePutRequest: PostUpdateRequestDTO
+    ): ResponseEntity<Void> {
+        postService.updatePost(postUpdatePutRequest)
+        return ResponseEntity.ok().build()
     }
 }

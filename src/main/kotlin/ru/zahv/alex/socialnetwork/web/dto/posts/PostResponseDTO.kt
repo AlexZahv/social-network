@@ -16,7 +16,7 @@ data class PostResponseDTO(
         requiredMode = Schema.RequiredMode.NOT_REQUIRED
     )
     @JsonProperty("id")
-    private val id: String? = null,
+    var id: String? = null,
 
     /**
      * Текст поста
@@ -29,7 +29,7 @@ data class PostResponseDTO(
         requiredMode = Schema.RequiredMode.NOT_REQUIRED
     )
     @JsonProperty("text")
-    private val text: String? = null,
+    var text: String? = null,
 
     /**
      * Идентификатор пользователя
@@ -41,5 +41,5 @@ data class PostResponseDTO(
         requiredMode = Schema.RequiredMode.NOT_REQUIRED
     )
     @JsonProperty("author_user_id")
-    private val authorUserId: String? = null
+    var authorUserId: String? = null
 )

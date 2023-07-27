@@ -1,0 +1,69 @@
+<?xml version="1.1" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                      http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+
+    <changeSet id="V26072023-1-create-posts-table" author="azakhvalinskiy">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="posts"/>
+            </not>
+        </preConditions>
+        <createTable tableName="posts">
+            <column name="id" type="varchar(50)">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="author_id" type="varchar(50)">
+                <constraints foreignKeyName="posts_author_fk" notNullConstraintName="posts_author_notnull"/>
+            </column>
+            <column name="post_text" type="text"/>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="V26072023-1-alter-posts-table" author="azakhvalinskiy">
+        <preConditions onFail="MARK_RAN">
+                <tableExists tableName="posts"/>
+        </preConditions>
+        <addColumn tableName="posts">
+            <column name="create_date" type="timestamp"/>
+        </addColumn>
+    </changeSet>
+
+    <changeSet id="V26072023-1-fill-posts-table" author="azakhvalinskiy">
+        <preConditions onFail="MARK_RAN">
+            <and>
+                <tableExists tableName="posts"/>
+
+                <sqlCheck expectedResult="1">
+                    <![CDATA[
+                        select
+                            case
+                                when count(*)<1000000 then 1
+                                else 0
+                            end
+                        from posts
+                    ]]>
+                </sqlCheck>
+            </and>
+        </preConditions>
+        <sql dbms="postgresql">
+            <![CDATA[
+            insert
+            into
+                posts (id,
+                       post_text,
+                       author_id,
+                       create_date)
+            select
+                gen_random_uuid(),
+                gen_random_uuid() || u.first_name || gen_random_uuid () || ' ' || u.second_name || ' ' || gen_random_uuid () || ' ' || u.city || ' ' || gen_random_uuid (),
+                u.id,
+                now()
+            from
+                users u;
+            ]]>
+        </sql>
+    </changeSet>
+</databaseChangeLog>

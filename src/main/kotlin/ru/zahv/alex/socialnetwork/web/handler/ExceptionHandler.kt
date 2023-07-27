@@ -8,10 +8,7 @@ import org.springframework.web.bind.annotation.ControllerAdvice
 import org.springframework.web.bind.annotation.ExceptionHandler
 import org.springframework.web.context.request.WebRequest
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler
-import ru.zahv.alex.socialnetwork.business.exceptions.BaseSocialNetworkException
-import ru.zahv.alex.socialnetwork.business.exceptions.CustomAuthorizationException
-import ru.zahv.alex.socialnetwork.business.exceptions.InvalidPasswordException
-import ru.zahv.alex.socialnetwork.business.exceptions.UserNotFoundException
+import ru.zahv.alex.socialnetwork.business.exceptions.*
 import ru.zahv.alex.socialnetwork.web.dto.ErrorResponseDTO
 
 @ControllerAdvice
@@ -26,6 +23,10 @@ class ExceptionHandler(val objectMapper: ObjectMapper) : ResponseEntityException
             }
 
             is UserNotFoundException -> {
+                status = HttpStatus.NOT_FOUND
+            }
+
+            is PostNotFoundException -> {
                 status = HttpStatus.NOT_FOUND
             }
 

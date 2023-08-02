@@ -1,5 +1,6 @@
 package ru.zahv.alex.socialnetwork.business.persistance.repository.plain
 
+import org.springframework.beans.factory.annotation.Qualifier
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty
 import org.springframework.jdbc.core.RowMapper
 import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource
@@ -17,12 +18,15 @@ import java.util.*
 
 @Repository
 @ConditionalOnProperty(name = ["orm.enabled"], havingValue = "false", matchIfMissing = true)
-class AuthTokenJDBCDao(private val jdbcTemplate: NamedParameterJdbcTemplate) : AuthTokenDao {
+class AuthTokenJDBCDao(
+    @Qualifier("masterTemplate") private val masterTemplate: NamedParameterJdbcTemplate,
+    @Qualifier("slaveTemplate") private val slaveTemplate: NamedParameterJdbcTemplate
+) : AuthTokenDao {
     override fun findFirstByUserIdAndExpireDateGreaterThan(userId: String, date: LocalDateTime?): AuthTokenEntity? {
         val namedParameters: SqlParameterSource = MapSqlParameterSource()
             .addValue("userId", userId)
             .addValue("date", date)
-        val tokenList = jdbcTemplate.query(
+        val tokenList = slaveTemplate.query(
             "SELECT * from auth_tokens where user_id = :userId and expire_date >= :date order by expire_date desc",
             namedParameters,
             TokenRowMapper(),
@@ -37,7 +41,7 @@ class AuthTokenJDBCDao(private val jdbcTemplate: NamedParameterJdbcTemplate) : A
         val namedParameters: SqlParameterSource = MapSqlParameterSource()
             .addValue("userId", userId)
             .addValue("date", date)
-        jdbcTemplate.update(
+        masterTemplate.update(
             "update auth_tokens set expire_date=:date where expire_date >:date and user_id=:userId",
             namedParameters,
         )
@@ -45,7 +49,7 @@ class AuthTokenJDBCDao(private val jdbcTemplate: NamedParameterJdbcTemplate) : A
 
     override fun findFirstByValue(value: String): AuthTokenEntity? {
         val namedParameters: SqlParameterSource = MapSqlParameterSource().addValue("value", value)
-        val tokenList = jdbcTemplate.query(
+        val tokenList = slaveTemplate.query(
             "SELECT * from auth_tokens where id = :value",
             namedParameters,
             TokenRowMapper(),
@@ -59,10 +63,10 @@ class AuthTokenJDBCDao(private val jdbcTemplate: NamedParameterJdbcTemplate) : A
     override fun insert(authTokenEntity: AuthTokenEntity): AuthTokenEntity {
         val namedParameters: SqlParameterSource = BeanPropertySqlParameterSource(authTokenEntity)
         authTokenEntity.id = UUID.randomUUID().toString()
-        jdbcTemplate.update(
+        masterTemplate.update(
             "insert into " +
-                "auth_tokens (id, user_id, expire_date, issue_date) " +
-                "values (:id, :userId, :expireDate, :issueDate)",
+                    "auth_tokens (id, user_id, expire_date, issue_date) " +
+                    "values (:id, :userId, :expireDate, :issueDate)",
             namedParameters,
         )
         return authTokenEntity
@@ -71,13 +75,12 @@ class AuthTokenJDBCDao(private val jdbcTemplate: NamedParameterJdbcTemplate) : A
     override fun update(authTokenEntity: AuthTokenEntity): AuthTokenEntity {
         val namedParameters: SqlParameterSource = BeanPropertySqlParameterSource(authTokenEntity)
         authTokenEntity.id = UUID.randomUUID().toString()
-        jdbcTemplate.update(
-            "update auth_tokens set" +
-                "user_id=:userId, " +
-                "value=:value, " +
-                "expire_date=:expireDate, " +
-                "issue_date=:issueDate" +
-                "where id:=id",
+        masterTemplate.update(
+            "update auth_tokens set " +
+                    "user_id=:userId, " +
+                    "expire_date=:expireDate, " +
+                    "issue_date=:issueDate " +
+                    "where id:=id",
             namedParameters,
         )
         return authTokenEntity

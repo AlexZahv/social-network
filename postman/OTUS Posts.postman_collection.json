@@ -1,0 +1,573 @@
+{
+	"info": {
+		"_postman_id": "d549a869-faf1-4130-a9dc-109944f4abfd",
+		"name": "OTUS Posts",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "25699207"
+	},
+	"item": [
+		{
+			"name": "Register user",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"pm.collectionVariables.set('password', 'mrWorldWide')"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"// access response body\r",
+							"// use .json() for JSON responses\r",
+							"let resp = pm.response.json()\r",
+							"// set the response as a variable\r",
+							"pm.collectionVariables.set('user_id', resp.user_id)\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "accept",
+						"value": "application/json"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"first_name\": \"Фёдор\",\r\n  \"second_name\": \"Конюхов\",\r\n  \"sex\": \"MALE\",\r\n  \"age\": 65,\r\n  \"birthdate\": \"1958-07-02\",\r\n  \"biography\": \"Люблю ходить в кругосветку\",\r\n  \"city\": \"Москва\",\r\n  \"password\": \"{{password}}\"\r\n}"
+				},
+				"url": {
+					"raw": "http://185.244.51.238:30009/api/user/register",
+					"protocol": "http",
+					"host": [
+						"185",
+						"244",
+						"51",
+						"238"
+					],
+					"port": "30009",
+					"path": [
+						"api",
+						"user",
+						"register"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Login user",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"let resp = pm.response.json()\r",
+							"pm.collectionVariables.set('token', resp.token)\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "accept",
+						"value": "application/json"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"id\": \"{{user_id}}\",\r\n  \"password\": \"{{password}}\"\r\n}"
+				},
+				"url": {
+					"raw": "http://185.244.51.238:30009/login",
+					"protocol": "http",
+					"host": [
+						"185",
+						"244",
+						"51",
+						"238"
+					],
+					"port": "30009",
+					"path": [
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Register 1 friend",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"pm.collectionVariables.set('password', 'mrWorldWide')"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"// access response body\r",
+							"// use .json() for JSON responses\r",
+							"let resp = pm.response.json()\r",
+							"// set the response as a variable\r",
+							"pm.collectionVariables.set('friend_id', resp.user_id)\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "accept",
+						"value": "application/json"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"first_name\": \"Иван\",\r\n  \"second_name\": \"Кузьмичёв\",\r\n  \"sex\": \"MALE\",\r\n  \"age\": 55,\r\n  \"birthdate\": \"1958-07-02\",\r\n  \"biography\": \"Люблю ходить в баньку\",\r\n  \"city\": \"Москва\",\r\n  \"password\": \"{{password}}\"\r\n}"
+				},
+				"url": {
+					"raw": "http://185.244.51.238:30009/api/user/register",
+					"protocol": "http",
+					"host": [
+						"185",
+						"244",
+						"51",
+						"238"
+					],
+					"port": "30009",
+					"path": [
+						"api",
+						"user",
+						"register"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Register 2 friend",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"pm.collectionVariables.set('password', 'mrWorldWide')"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"// access response body\r",
+							"// use .json() for JSON responses\r",
+							"let resp = pm.response.json()\r",
+							"// set the response as a variable\r",
+							"pm.collectionVariables.set('friend2_id', resp.user_id)\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "accept",
+						"value": "application/json"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"first_name\": \"Иван\",\r\n  \"second_name\": \"Кузьмичёв\",\r\n  \"sex\": \"MALE\",\r\n  \"age\": 55,\r\n  \"birthdate\": \"1958-07-02\",\r\n  \"biography\": \"Люблю ходить в баньку\",\r\n  \"city\": \"Москва\",\r\n  \"password\": \"{{password}}\"\r\n}"
+				},
+				"url": {
+					"raw": "http://185.244.51.238:30009/api/user/register",
+					"protocol": "http",
+					"host": [
+						"185",
+						"244",
+						"51",
+						"238"
+					],
+					"port": "30009",
+					"path": [
+						"api",
+						"user",
+						"register"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Login 1 friend",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"let resp = pm.response.json()\r",
+							"pm.collectionVariables.set('friend_token', resp.token)\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "accept",
+						"value": "application/json"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"id\": \"{{friend_id}}\",\r\n  \"password\": \"{{password}}\"\r\n}"
+				},
+				"url": {
+					"raw": "http://185.244.51.238:30009/login",
+					"protocol": "http",
+					"host": [
+						"185",
+						"244",
+						"51",
+						"238"
+					],
+					"port": "30009",
+					"path": [
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Login 2 friend",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"let resp = pm.response.json()\r",
+							"pm.collectionVariables.set('friend2_token', resp.token)\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "accept",
+						"value": "application/json"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"id\": \"{{friend2_id}}\",\r\n  \"password\": \"{{password}}\"\r\n}"
+				},
+				"url": {
+					"raw": "http://185.244.51.238:30009/login",
+					"protocol": "http",
+					"host": [
+						"185",
+						"244",
+						"51",
+						"238"
+					],
+					"port": "30009",
+					"path": [
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Friend 1 create post",
+			"protocolProfileBehavior": {
+				"disabledSystemHeaders": {
+					"accept": true,
+					"user-agent": true,
+					"accept-encoding": true,
+					"connection": true
+				}
+			},
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "accept",
+						"value": "application/json"
+					},
+					{
+						"key": "Authorization",
+						"value": "Bearer {{friend_token}}"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"text\": \"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Lectus mauris ultrices eros in cursus turpis massa.\"\r\n}"
+				},
+				"url": {
+					"raw": "http://185.244.51.238:30009/api/post/create",
+					"protocol": "http",
+					"host": [
+						"185",
+						"244",
+						"51",
+						"238"
+					],
+					"port": "30009",
+					"path": [
+						"api",
+						"post",
+						"create"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Friend 2 create post",
+			"protocolProfileBehavior": {
+				"disabledSystemHeaders": {
+					"accept": true,
+					"user-agent": true,
+					"accept-encoding": true,
+					"connection": true
+				}
+			},
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "accept",
+						"value": "application/json"
+					},
+					{
+						"key": "Authorization",
+						"value": "Bearer {{friend_token}}"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"text\": \"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Lectus mauris ultrices eros in cursus turpis massa.\"\r\n}"
+				},
+				"url": {
+					"raw": "http://185.244.51.238:30009/api/post/create",
+					"protocol": "http",
+					"host": [
+						"185",
+						"244",
+						"51",
+						"238"
+					],
+					"port": "30009",
+					"path": [
+						"api",
+						"post",
+						"create"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Make friend Copy",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "accept",
+						"value": "*/*"
+					},
+					{
+						"key": "Authorization",
+						"value": "Bearer {{token}}"
+					}
+				],
+				"url": {
+					"raw": "http://zahv-alex.ru:30009/api/friend/set/{{friend_id}}",
+					"protocol": "http",
+					"host": [
+						"zahv-alex",
+						"ru"
+					],
+					"port": "30009",
+					"path": [
+						"api",
+						"friend",
+						"set",
+						"{{friend_id}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Make friend 2",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "accept",
+						"value": "*/*"
+					},
+					{
+						"key": "Authorization",
+						"value": "Bearer {{token}}"
+					}
+				],
+				"url": {
+					"raw": "http://zahv-alex.ru:30009/api/friend/set/{{friend2_id}}",
+					"protocol": "http",
+					"host": [
+						"zahv-alex",
+						"ru"
+					],
+					"port": "30009",
+					"path": [
+						"api",
+						"friend",
+						"set",
+						"{{friend2_id}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get posts feed Copy",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "accept",
+						"value": "application/json"
+					},
+					{
+						"key": "Authorization",
+						"value": "Bearer {{token}}"
+					}
+				],
+				"url": {
+					"raw": "http://zahv-alex.ru:30009/api/post/feed?offset=0&limit=10",
+					"protocol": "http",
+					"host": [
+						"zahv-alex",
+						"ru"
+					],
+					"port": "30009",
+					"path": [
+						"api",
+						"post",
+						"feed"
+					],
+					"query": [
+						{
+							"key": "offset",
+							"value": "0"
+						},
+						{
+							"key": "limit",
+							"value": "10"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"variable": [
+		{
+			"key": "password",
+			"value": ""
+		},
+		{
+			"key": "user_id",
+			"value": ""
+		},
+		{
+			"key": "token",
+			"value": ""
+		},
+		{
+			"key": "friend_id",
+			"value": ""
+		},
+		{
+			"key": "friend_token",
+			"value": ""
+		},
+		{
+			"key": "friend2_id",
+			"value": ""
+		},
+		{
+			"key": "friend2_token",
+			"value": ""
+		}
+	]
+}

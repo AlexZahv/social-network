@@ -26,8 +26,8 @@ import java.math.BigDecimal
 
 @Validated
 @Tag(name = "post", description = "the post API")
-@RestController("post")
-@RequestMapping
+@RestController
+@RequestMapping("/api/post")
 class PostController(val postService: PostService) {
     /**
      * POST /post/create

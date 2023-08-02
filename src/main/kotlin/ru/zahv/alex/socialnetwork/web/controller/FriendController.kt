@@ -17,7 +17,7 @@ import ru.zahv.alex.socialnetwork.utils.SecurityContextHolder
 import ru.zahv.alex.socialnetwork.web.dto.ErrorResponseDTO
 
 @RestController
-@RequestMapping("friend")
+@RequestMapping("/api/friend")
 @Tag(name = "friend", description = "the friend API")
 class FriendController(val friendService: FriendService) {
 

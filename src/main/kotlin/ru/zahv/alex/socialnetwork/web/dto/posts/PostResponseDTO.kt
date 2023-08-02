@@ -2,6 +2,7 @@ package ru.zahv.alex.socialnetwork.web.dto.posts
 
 import com.fasterxml.jackson.annotation.JsonProperty
 import io.swagger.v3.oas.annotations.media.Schema
+import java.time.LocalDateTime
 
 data class PostResponseDTO(
 
@@ -41,5 +42,16 @@ data class PostResponseDTO(
         requiredMode = Schema.RequiredMode.NOT_REQUIRED
     )
     @JsonProperty("author_user_id")
-    var authorUserId: String? = null
-)
+    var authorUserId: String? = null,
+
+    /**
+     * Дата создания поста
+     * @return createDate
+     */
+    @Schema(
+        name = "create_date",
+        description = "Дата создания поста",
+        requiredMode = Schema.RequiredMode.NOT_REQUIRED
+    )
+    var createDate: LocalDateTime
+) : java.io.Serializable

@@ -1,5 +1,6 @@
 package ru.zahv.alex.socialnetwork.business.persistance.repository.plain
 
+import org.springframework.beans.factory.annotation.Qualifier
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty
 import org.springframework.jdbc.core.RowMapper
 import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource
@@ -21,11 +22,14 @@ import java.util.*
 
 @Repository
 @ConditionalOnProperty(name = ["orm.enabled"], havingValue = "false", matchIfMissing = true)
-class PostJDBCDao(private val jdbcTemplate: NamedParameterJdbcTemplate) : PostDao {
+class PostJDBCDao(
+    @Qualifier("masterTemplate") private val masterTemplate: NamedParameterJdbcTemplate,
+    @Qualifier("slaveTemplate") private val slaveTemplate: NamedParameterJdbcTemplate
+) : PostDao {
 
     override fun getPost(id: String): PostEntity? {
         val namedParameters: SqlParameterSource = MapSqlParameterSource().addValue("id", id)
-        val postList = jdbcTemplate.query(
+        val postList = slaveTemplate.query(
             "SELECT * from posts where id = :id",
             namedParameters,
             PostRowMapper(),
@@ -48,7 +52,7 @@ class PostJDBCDao(private val jdbcTemplate: NamedParameterJdbcTemplate) : PostDa
                 LocalDateTime.now()
             )
         val namedParameters: SqlParameterSource = BeanPropertySqlParameterSource(entity)
-        jdbcTemplate.update(
+        masterTemplate.update(
             "insert into " +
                     "posts (id, post_text, author_id, create_date) " +
                     "values (:id, :text, :authorId, :createDate) ",
@@ -67,7 +71,7 @@ class PostJDBCDao(private val jdbcTemplate: NamedParameterJdbcTemplate) : PostDa
                 SecurityContextHolder.getCurrentUser()
             )
         val namedParameters: SqlParameterSource = BeanPropertySqlParameterSource(entity)
-        jdbcTemplate.update(
+        masterTemplate.update(
             "update " +
                     "posts set post_text=:text " +
                     "where id=:id and author_id=:authorId ",
@@ -77,31 +81,48 @@ class PostJDBCDao(private val jdbcTemplate: NamedParameterJdbcTemplate) : PostDa
 
     @Transactional
     override fun deletePost(id: String) {
-        val entity =
-            PostEntity(
-                id,
-                null,
-                SecurityContextHolder.getCurrentUser()
-            )
-        val namedParameters: SqlParameterSource = BeanPropertySqlParameterSource(entity)
-        jdbcTemplate.update(
+        val namedParameters: SqlParameterSource = MapSqlParameterSource()
+            .addValue("id", id)
+            .addValue("authorId", SecurityContextHolder.getCurrentUser())
+
+        masterTemplate.update(
             "delete from posts " +
                     "where id=:id and author_id=:authorId ",
             namedParameters,
         )
     }
 
-    override fun getPostFeed(offset: BigDecimal, limit: BigDecimal): List<PostEntity> {
+    override fun getPostFeed(userId: String, offset: BigDecimal, limit: BigDecimal): List<PostEntity> {
         val namedParameters: SqlParameterSource = MapSqlParameterSource()
             .addValue("offset", offset.longValueExact())
             .addValue("limit", limit.longValueExact())
+            .addValue("userId", userId)
 
-        return jdbcTemplate.query(
+        return slaveTemplate.query(
             "select p.* from posts p " +
-                    "join (select id from posts order by create_date desc limit :limit offset :offset) as b " +
+                    "join (" +
+                    "select p1.id from posts p1 join friendship fr on p1.author_id = fr.friend_id " +
+                    "where fr.user_id=:userId " +
+                    "order by p1.create_date desc limit :limit offset :offset" +
+                    ") as b " +
                     "on b.id = p.id",
             namedParameters,
             PostRowMapper(),
+        )
+    }
+
+    override fun getAllCacheKeyList(userId: String): List<String> {
+        val namedParameters: SqlParameterSource = MapSqlParameterSource()
+            .addValue("userId", userId)
+
+        return slaveTemplate.query(
+            "select 'POSTS_' || fr.friend_id as \"key\" " +
+                    "from friendship fr " +
+                    "join auth_tokens a on fr.friend_id = a.user_id " +
+                    "where fr.user_id=:userId " +
+                    "and a.expire_date> now() - interval '10 minutes' ",
+            namedParameters,
+            PostFriendRowMapper()
         )
     }
 }
@@ -116,5 +137,12 @@ class PostRowMapper : RowMapper<PostEntity> {
         postEntity.authorId = rs.getString("AUTHOR_ID")
         postEntity.createDate = rs.getTimestamp("CREATE_DATE").toLocalDateTime()
         return postEntity
+    }
+}
+
+class PostFriendRowMapper : RowMapper<String> {
+    @Throws(SQLException::class)
+    override fun mapRow(rs: ResultSet, rowNum: Int): String {
+        return rs.getString("KEY")
     }
 }

@@ -19,7 +19,7 @@ import java.util.*
 @ConditionalOnProperty(name = ["orm.enabled"], havingValue = "false", matchIfMissing = true)
 class UserJDBCDao(
     @Qualifier("masterTemplate") private val masterTemplate: NamedParameterJdbcTemplate,
-    @Qualifier("slaveTemplate") private val slaveTemplate: NamedParameterJdbcTemplate,
+    @Qualifier("slaveTemplate") private val slaveTemplate: NamedParameterJdbcTemplate
 ) : UserDao {
     override fun findFirstById(id: String): UserEntity? {
         val namedParameters: SqlParameterSource = MapSqlParameterSource().addValue("id", id)

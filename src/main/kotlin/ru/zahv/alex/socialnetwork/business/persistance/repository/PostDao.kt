@@ -10,5 +10,6 @@ interface PostDao {
     fun createPost(createRequestDTO: PostCreateRequestDTO): String
     fun deletePost(id: String)
     fun getPost(id: String): PostEntity?
-    fun getPostFeed(offset: BigDecimal, limit: BigDecimal): List<PostEntity>
+    fun getPostFeed(userId: String, offset: BigDecimal, limit: BigDecimal): List<PostEntity>
+    fun getAllCacheKeyList(userId: String): List<String>
 }

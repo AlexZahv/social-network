@@ -1,0 +1,530 @@
+{
+	"info": {
+		"_postman_id": "9a0fdb58-48fe-484c-8f67-92fb78cb5d1e",
+		"name": "Otus Dialogs",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "25699207"
+	},
+	"item": [
+		{
+			"name": "Register user1",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"pm.collectionVariables.set('password', 'mrWorldWide')"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"// access response body\r",
+							"// use .json() for JSON responses\r",
+							"let resp = pm.response.json()\r",
+							"// set the response as a variable\r",
+							"pm.collectionVariables.set('user_id', resp.user_id)\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "accept",
+						"value": "application/json"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"first_name\": \"Фёдор\",\r\n  \"second_name\": \"Конюхов\",\r\n  \"sex\": \"MALE\",\r\n  \"age\": 65,\r\n  \"birthdate\": \"1958-07-02\",\r\n  \"biography\": \"Люблю ходить в кругосветку\",\r\n  \"city\": \"Москва\",\r\n  \"password\": \"{{password}}\"\r\n}"
+				},
+				"url": {
+					"raw": "http://185.244.51.238:30009/api/user/register",
+					"protocol": "http",
+					"host": [
+						"185",
+						"244",
+						"51",
+						"238"
+					],
+					"port": "30009",
+					"path": [
+						"api",
+						"user",
+						"register"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Login user1",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"let resp = pm.response.json()\r",
+							"pm.collectionVariables.set('token', resp.token)\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "accept",
+						"value": "application/json"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"id\": \"{{user_id}}\",\r\n  \"password\": \"{{password}}\"\r\n}"
+				},
+				"url": {
+					"raw": "http://185.244.51.238:30009/login",
+					"protocol": "http",
+					"host": [
+						"185",
+						"244",
+						"51",
+						"238"
+					],
+					"port": "30009",
+					"path": [
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Register 1 friend",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"pm.collectionVariables.set('password', 'mrWorldWide')"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"// access response body\r",
+							"// use .json() for JSON responses\r",
+							"let resp = pm.response.json()\r",
+							"// set the response as a variable\r",
+							"pm.collectionVariables.set('friend_id', resp.user_id)\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "accept",
+						"value": "application/json"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"first_name\": \"Иван\",\r\n  \"second_name\": \"Кузьмичёв\",\r\n  \"sex\": \"MALE\",\r\n  \"age\": 55,\r\n  \"birthdate\": \"1958-07-02\",\r\n  \"biography\": \"Люблю ходить в баньку\",\r\n  \"city\": \"Москва\",\r\n  \"password\": \"{{password}}\"\r\n}"
+				},
+				"url": {
+					"raw": "http://185.244.51.238:30009/api/user/register",
+					"protocol": "http",
+					"host": [
+						"185",
+						"244",
+						"51",
+						"238"
+					],
+					"port": "30009",
+					"path": [
+						"api",
+						"user",
+						"register"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Register 2 friend",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"pm.collectionVariables.set('password', 'mrWorldWide')"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"// access response body\r",
+							"// use .json() for JSON responses\r",
+							"let resp = pm.response.json()\r",
+							"// set the response as a variable\r",
+							"pm.collectionVariables.set('friend2_id', resp.user_id)\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "accept",
+						"value": "application/json"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"first_name\": \"Иван\",\r\n  \"second_name\": \"Кузьмичёв\",\r\n  \"sex\": \"MALE\",\r\n  \"age\": 55,\r\n  \"birthdate\": \"1958-07-02\",\r\n  \"biography\": \"Люблю ходить в баньку\",\r\n  \"city\": \"Москва\",\r\n  \"password\": \"{{password}}\"\r\n}"
+				},
+				"url": {
+					"raw": "http://185.244.51.238:30009/api/user/register",
+					"protocol": "http",
+					"host": [
+						"185",
+						"244",
+						"51",
+						"238"
+					],
+					"port": "30009",
+					"path": [
+						"api",
+						"user",
+						"register"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Login 1 friend",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"let resp = pm.response.json()\r",
+							"pm.collectionVariables.set('friend_token', resp.token)\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "accept",
+						"value": "application/json"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"id\": \"{{friend_id}}\",\r\n  \"password\": \"{{password}}\"\r\n}"
+				},
+				"url": {
+					"raw": "http://185.244.51.238:30009/login",
+					"protocol": "http",
+					"host": [
+						"185",
+						"244",
+						"51",
+						"238"
+					],
+					"port": "30009",
+					"path": [
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Login 2 friend",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"let resp = pm.response.json()\r",
+							"pm.collectionVariables.set('friend2_token', resp.token)\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "accept",
+						"value": "application/json"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"id\": \"{{friend2_id}}\",\r\n  \"password\": \"{{password}}\"\r\n}"
+				},
+				"url": {
+					"raw": "http://185.244.51.238:30009/login",
+					"protocol": "http",
+					"host": [
+						"185",
+						"244",
+						"51",
+						"238"
+					],
+					"port": "30009",
+					"path": [
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Friend 1send message",
+			"protocolProfileBehavior": {
+				"disabledSystemHeaders": {
+					"accept": true,
+					"user-agent": true,
+					"accept-encoding": true,
+					"connection": true
+				}
+			},
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "accept",
+						"value": "application/json"
+					},
+					{
+						"key": "Authorization",
+						"value": "Bearer {{token}}"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"from\": \"{{user_id}}\",\r\n  \"to\": \"{{friend_id}}\",\r\n  \"text\": \"Привет, как дела?\"\r\n}"
+				},
+				"url": {
+					"raw": "http://185.244.51.238:30009/api/dialog/send",
+					"protocol": "http",
+					"host": [
+						"185",
+						"244",
+						"51",
+						"238"
+					],
+					"port": "30009",
+					"path": [
+						"api",
+						"dialog",
+						"send"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Friend 2 send message",
+			"protocolProfileBehavior": {
+				"disabledSystemHeaders": {
+					"accept": true,
+					"user-agent": true,
+					"accept-encoding": true,
+					"connection": true
+				}
+			},
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "accept",
+						"value": "application/json"
+					},
+					{
+						"key": "Authorization",
+						"value": "Bearer {{token}}"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"from\": \"{{user_id}}\",\r\n  \"to\": \"{{friend2_id}}\",\r\n  \"text\": \"Привет, как дела?\"\r\n}"
+				},
+				"url": {
+					"raw": "http://185.244.51.238:30009/api/dialog/send",
+					"protocol": "http",
+					"host": [
+						"185",
+						"244",
+						"51",
+						"238"
+					],
+					"port": "30009",
+					"path": [
+						"api",
+						"dialog",
+						"send"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get friend 1 dialog",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "accept",
+						"value": "application/json"
+					},
+					{
+						"key": "Authorization",
+						"value": "Bearer {{token}}"
+					}
+				],
+				"url": {
+					"raw": "http://zahv-alex.ru:30009/api/dialog/{{friend_id}}",
+					"protocol": "http",
+					"host": [
+						"zahv-alex",
+						"ru"
+					],
+					"port": "30009",
+					"path": [
+						"api",
+						"dialog",
+						"{{friend_id}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get friend 2 dialog",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "accept",
+						"value": "application/json"
+					},
+					{
+						"key": "Authorization",
+						"value": "Bearer {{token}}"
+					}
+				],
+				"url": {
+					"raw": "http://zahv-alex.ru:30009/api/dialog/{{friend2_id}}",
+					"protocol": "http",
+					"host": [
+						"zahv-alex",
+						"ru"
+					],
+					"port": "30009",
+					"path": [
+						"api",
+						"dialog",
+						"{{friend2_id}}"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"variable": [
+		{
+			"key": "password",
+			"value": ""
+		},
+		{
+			"key": "user_id",
+			"value": ""
+		},
+		{
+			"key": "token",
+			"value": ""
+		},
+		{
+			"key": "friend_id",
+			"value": ""
+		},
+		{
+			"key": "friend2_id",
+			"value": ""
+		},
+		{
+			"key": "friend_token",
+			"value": ""
+		},
+		{
+			"key": "friend2_token",
+			"value": ""
+		}
+	]
+}

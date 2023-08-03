@@ -7,6 +7,7 @@
     <includeAll path="initial" relativeToChangelogFile="true"/>
     <includeAll path="homework_2" relativeToChangelogFile="true"/>
     <includeAll path="homework_4" relativeToChangelogFile="true"/>
+    <includeAll path="homework_5" relativeToChangelogFile="true"/>
 
 
 </databaseChangeLog>

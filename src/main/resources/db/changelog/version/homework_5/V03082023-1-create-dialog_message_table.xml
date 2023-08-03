@@ -1,0 +1,30 @@
+<?xml version="1.1" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                      http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+
+    <changeSet id="V03082023-1-create-dialog_message_table" author="azakhvalinskiy">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="dialog_message"/>
+            </not>
+        </preConditions>
+        <createTable tableName="dialog_message">
+            <column name="id" type="varchar(50)">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="from_user_id" type="varchar(50)">
+                <constraints foreignKeyName="message_from_user_fk" notNullConstraintName="message_from_user_notnull"/>
+            </column>
+            <column name="to_user_id" type="varchar(50)">
+                <constraints foreignKeyName="message_to_user_fk" notNullConstraintName="to_from_user_notnull"/>
+            </column>
+            <column name="message_text" type="text"/>
+            <column name="create_date" type="timestamp">
+                <constraints notNullConstraintName="message_create_date_notnull"/>
+            </column>
+        </createTable>
+    </changeSet>
+</databaseChangeLog>

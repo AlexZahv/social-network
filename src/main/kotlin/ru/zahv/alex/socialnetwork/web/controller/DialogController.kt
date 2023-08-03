@@ -3,40 +3,49 @@ package ru.zahv.alex.socialnetwork.web.controller
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.Parameter
 import io.swagger.v3.oas.annotations.enums.ParameterIn
+import io.swagger.v3.oas.annotations.media.ArraySchema
 import io.swagger.v3.oas.annotations.media.Content
 import io.swagger.v3.oas.annotations.media.Schema
 import io.swagger.v3.oas.annotations.responses.ApiResponse
 import io.swagger.v3.oas.annotations.security.SecurityRequirement
 import io.swagger.v3.oas.annotations.tags.Tag
+import jakarta.validation.Valid
 import org.springframework.http.ResponseEntity
+import org.springframework.validation.annotation.Validated
 import org.springframework.web.bind.annotation.*
 import ru.zahv.alex.socialnetwork.aop.Authenticated
-import ru.zahv.alex.socialnetwork.business.service.FriendService
+import ru.zahv.alex.socialnetwork.business.service.DialogService
 import ru.zahv.alex.socialnetwork.config.OpenApiConfiguration
-import ru.zahv.alex.socialnetwork.utils.SecurityContextHolder
 import ru.zahv.alex.socialnetwork.web.dto.ErrorResponseDTO
+import ru.zahv.alex.socialnetwork.web.dto.dialogs.DialogMessageRequestDTO
+import ru.zahv.alex.socialnetwork.web.dto.dialogs.DialogMessageResponseDTO
+import java.util.*
 
+@Validated
+@Tag(name = "dialog", description = "the dialog API")
 @RestController
-@RequestMapping("/api/friend")
-@Tag(name = "friend", description = "the friend API")
+@RequestMapping("/api/dialog")
 @SecurityRequirement(name = OpenApiConfiguration.BEARER_AUTH_SECURITY_SCHEME_NAME)
-class FriendController(val friendService: FriendService) {
-
+class DialogController(private val dialogService: DialogService) {
     /**
-     * DELETE /delete/{user_id}
+     * GET /dialog/{user_id}/list
      *
      * @param userId  (required)
-     * @return Пользователь успешно удалил из друзей пользователя (status code 200)
+     * @return Диалог между двумя пользователями (status code 200)
      * or Невалидные данные ввода (status code 400)
      * or Неавторизованный доступ (status code 401)
      * or Ошибка сервера (status code 500)
      * or Ошибка сервера (status code 503)
      */
     @Operation(
-        operationId = "friendDeleteUserIdPut",
+        operationId = "dialogUserIdListGet",
         responses = [ApiResponse(
             responseCode = "200",
-            description = "Пользователь успешно удалил из друзей пользователя"
+            description = "Диалог между двумя пользователями",
+            content = [Content(
+                mediaType = "application/json",
+                array = ArraySchema(schema = Schema(implementation = DialogMessageRequestDTO::class))
+            )]
         ), ApiResponse(responseCode = "400", description = "Невалидные данные ввода"), ApiResponse(
             responseCode = "401",
             description = "Неавторизованный доступ"
@@ -54,68 +63,67 @@ class FriendController(val friendService: FriendService) {
                 mediaType = "application/json",
                 schema = Schema(implementation = ErrorResponseDTO::class)
             )]
-        )]
+        )],
+        security = [SecurityRequirement(name = "bearerAuth")]
     )
     @Authenticated
-    @DeleteMapping(value = ["/delete/{user_id}"], produces = ["application/json"])
-    fun friendDeleteUserIdPut(
-        @Parameter(
-            name = "user_id",
-            description = "Идентификатор пользователя",
-            required = true,
-            `in` = ParameterIn.PATH
-        ) @PathVariable("user_id") userId: String
-    ): ResponseEntity<Void?>? {
-        friendService.deleteFriendShip(SecurityContextHolder.getCurrentUser(), userId)
-        return ResponseEntity.ok().build()
-    }
-
-
-    /**
-     * PUT /set/{user_id}
-     *
-     * @param userId  (required)
-     * @return Пользователь успешно указал своего друга (status code 200)
-     * or Невалидные данные ввода (status code 400)
-     * or Неавторизованный доступ (status code 401)
-     * or Ошибка сервера (status code 500)
-     * or Ошибка сервера (status code 503)
-     */
-    @Operation(
-        operationId = "friendSetUserIdPut",
-        responses = [ApiResponse(
-            responseCode = "200",
-            description = "Пользователь успешно указал своего друга"
-        ), ApiResponse(responseCode = "400", description = "Невалидные данные ввода"), ApiResponse(
-            responseCode = "401",
-            description = "Неавторизованный доступ"
-        ), ApiResponse(
-            responseCode = "500",
-            description = "Ошибка сервера",
-            content = [Content(
-                mediaType = "application/json",
-                schema = Schema(implementation = ErrorResponseDTO::class)
-            )]
-        ), ApiResponse(
-            responseCode = "503",
-            description = "Ошибка сервера",
-            content = [Content(
-                mediaType = "application/json",
-                schema = Schema(implementation = ErrorResponseDTO::class)
-            )]
-        )]
-    )
-    @PutMapping(value = ["/set/{user_id}"], produces = ["application/json"])
-    @Authenticated
-    fun friendSetUserIdPut(
+    @GetMapping(value = ["/{user_id}/list"], produces = ["application/json"])
+    fun dialogUserIdListGet(
         @Parameter(
             name = "user_id",
             description = "",
             required = true,
             `in` = ParameterIn.PATH
         ) @PathVariable("user_id") userId: String
-    ): ResponseEntity<Void?>? {
-        friendService.addFriendShip(SecurityContextHolder.getCurrentUser(), userId)
+    ): ResponseEntity<List<DialogMessageResponseDTO>> {
+
+        return ResponseEntity.ok(dialogService.getAllMessageList(userId))
+    }
+
+    /**
+     * POST /dialog/send
+     *
+     * @param dto  (optional)
+     * @return Успешно отправлено сообщение (status code 200)
+     * or Невалидные данные ввода (status code 400)
+     * or Неавторизованный доступ (status code 401)
+     * or Ошибка сервера (status code 500)
+     * or Ошибка сервера (status code 503)
+     */
+    @Operation(
+        operationId = "dialogUserIdSendPost",
+        responses = [ApiResponse(responseCode = "200", description = "Успешно отправлено сообщение"), ApiResponse(
+            responseCode = "400",
+            description = "Невалидные данные ввода"
+        ), ApiResponse(responseCode = "401", description = "Неавторизованный доступ"), ApiResponse(
+            responseCode = "500",
+            description = "Ошибка сервера",
+            content = [Content(
+                mediaType = "application/json",
+                schema = Schema(implementation = ErrorResponseDTO::class)
+            )]
+        ), ApiResponse(
+            responseCode = "503",
+            description = "Ошибка сервера",
+            content = [Content(
+                mediaType = "application/json",
+                schema = Schema(implementation = ErrorResponseDTO::class)
+            )]
+        )]
+    )
+    @Authenticated
+    @PostMapping(
+        value = ["/send"],
+        produces = ["application/json"],
+        consumes = ["application/json"]
+    )
+    fun dialogUserIdSendPost(
+        @Parameter(
+            name = "Dto",
+            description = ""
+        ) @Valid @RequestBody(required = false) dto: DialogMessageRequestDTO
+    ): ResponseEntity<Void> {
+        dialogService.addMessage(dto)
         return ResponseEntity.ok().build()
     }
 }

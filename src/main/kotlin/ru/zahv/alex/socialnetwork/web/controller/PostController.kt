@@ -28,6 +28,7 @@ import java.math.BigDecimal
 @Tag(name = "post", description = "the post API")
 @RestController
 @RequestMapping("/api/post")
+@SecurityRequirement(name = OpenApiConfiguration.BEARER_AUTH_SECURITY_SCHEME_NAME)
 class PostController(val postService: PostService) {
     /**
      * POST /post/create
@@ -70,7 +71,6 @@ class PostController(val postService: PostService) {
         consumes = ["application/json"]
     )
     @Authenticated
-    @SecurityRequirement(name = OpenApiConfiguration.BEARER_AUTH_SECURITY_SCHEME_NAME)
     fun postCreatePost(
         @Parameter(
             name = "PostCreatePostRequest",
@@ -117,7 +117,6 @@ class PostController(val postService: PostService) {
     )
     @DeleteMapping(value = ["/delete/{id}"], produces = ["application/json"])
     @Authenticated
-    @SecurityRequirement(name = OpenApiConfiguration.BEARER_AUTH_SECURITY_SCHEME_NAME)
     fun postDeleteIdPut(
         @Parameter(
             name = "id",
@@ -172,7 +171,6 @@ class PostController(val postService: PostService) {
     )
     @GetMapping(value = ["/feed"], produces = ["application/json"])
     @Authenticated
-    @SecurityRequirement(name = OpenApiConfiguration.BEARER_AUTH_SECURITY_SCHEME_NAME)
     fun postFeedGet(
         @DecimalMin("0") @Parameter(name = "offset", description = "", `in` = ParameterIn.QUERY) @Valid @RequestParam(
             value = "offset",
@@ -229,7 +227,6 @@ class PostController(val postService: PostService) {
     )
     @GetMapping(value = ["/get/{id}"], produces = ["application/json"])
     @Authenticated
-    @SecurityRequirement(name = OpenApiConfiguration.BEARER_AUTH_SECURITY_SCHEME_NAME)
     fun postGetIdGet(
         @Parameter(
             name = "id",
@@ -282,7 +279,6 @@ class PostController(val postService: PostService) {
         consumes = ["application/json"]
     )
     @Authenticated
-    @SecurityRequirement(name = OpenApiConfiguration.BEARER_AUTH_SECURITY_SCHEME_NAME)
     fun postUpdatePut(
         @Parameter(
             name = "PostUpdatePutRequest",

@@ -7,9 +7,9 @@ import java.math.BigDecimal
 
 interface PostDao {
     fun updatePost(postUpdateRequestDTO: PostUpdateRequestDTO)
-    fun createPost(createRequestDTO: PostCreateRequestDTO): String
+    fun createPost(createRequestDTO: PostCreateRequestDTO): PostEntity
     fun deletePost(id: String)
     fun getPost(id: String): PostEntity?
     fun getPostFeed(userId: String, offset: BigDecimal, limit: BigDecimal): List<PostEntity>
-    fun getAllCacheKeyList(userId: String): List<String>
+    fun getAllFriendIdList(userId: String): List<String>
 }

@@ -42,7 +42,7 @@ class PostJDBCDao(
     }
 
     @Transactional
-    override fun createPost(createRequestDTO: PostCreateRequestDTO): String {
+    override fun createPost(createRequestDTO: PostCreateRequestDTO): PostEntity {
         val id = UUID.randomUUID().toString()
         val entity =
             PostEntity(
@@ -59,7 +59,7 @@ class PostJDBCDao(
             namedParameters,
         )
 
-        return id
+        return entity
     }
 
     @Transactional
@@ -111,12 +111,12 @@ class PostJDBCDao(
         )
     }
 
-    override fun getAllCacheKeyList(userId: String): List<String> {
+    override fun getAllFriendIdList(userId: String): List<String> {
         val namedParameters: SqlParameterSource = MapSqlParameterSource()
             .addValue("userId", userId)
 
         return slaveTemplate.query(
-            "select 'POSTS_' || fr.friend_id as \"key\" " +
+            "select fr.friend_id as \"key\" " +
                     "from friendship fr " +
                     "join auth_tokens a on fr.friend_id = a.user_id " +
                     "where fr.user_id=:userId " +

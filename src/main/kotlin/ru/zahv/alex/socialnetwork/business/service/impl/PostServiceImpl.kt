@@ -7,6 +7,7 @@ import ru.zahv.alex.socialnetwork.business.mapper.PostMapper
 import ru.zahv.alex.socialnetwork.business.persistance.repository.PostDao
 import ru.zahv.alex.socialnetwork.business.service.PostQueueSenderService
 import ru.zahv.alex.socialnetwork.business.service.PostService
+import ru.zahv.alex.socialnetwork.business.service.UserService
 import ru.zahv.alex.socialnetwork.business.service.cache.PostFeedCacheService
 import ru.zahv.alex.socialnetwork.utils.SecurityContextHolder.Companion.getCurrentUser
 import ru.zahv.alex.socialnetwork.web.dto.posts.PostCreateRequestDTO
@@ -20,7 +21,8 @@ class PostServiceImpl(
     val postDao: PostDao,
     val mapper: PostMapper,
     val postFeedCacheService: PostFeedCacheService,
-    val postQueueSenderService: PostQueueSenderService
+    val postQueueSenderService: PostQueueSenderService,
+    val userService: UserService
 ) : PostService {
 
     companion object {
@@ -34,8 +36,15 @@ class PostServiceImpl(
      */
     override fun createPost(dto: PostCreateRequestDTO): String {
         val result = postDao.createPost(dto)
-        postDao.getAllFriendIdList(getCurrentUser())
-            .forEach { friendId -> postQueueSenderService.sendCreatedEvent(friendId, mapper.mapToResponseDTO(result)) }
+        if (checkUserIsCelebrity()) {
+            postDao.getAllFriendIdList(getCurrentUser())
+                .forEach { friendId ->
+                    postQueueSenderService.sendCreatedEvent(
+                        friendId,
+                        mapper.mapToResponseDTO(result)
+                    )
+                }
+        }
         return result.id!!
     }
 
@@ -46,9 +55,10 @@ class PostServiceImpl(
      */
     override fun deletePost(id: String) {
         postDao.deletePost(id)
-        println("Friend list ${postDao.getAllFriendIdList(getCurrentUser())}")
-        postDao.getAllFriendIdList(getCurrentUser())
-            .forEach { friendId -> postQueueSenderService.sendDeletedEvent(friendId) }
+        if (checkUserIsCelebrity()) {
+            postDao.getAllFriendIdList(getCurrentUser())
+                .forEach { friendId -> postQueueSenderService.sendDeletedEvent(friendId) }
+        }
     }
 
     /**
@@ -68,14 +78,16 @@ class PostServiceImpl(
      */
     override fun updatePost(dto: PostUpdateRequestDTO) {
         postDao.updatePost(dto)
-        val updatedPost = postDao.getPost(dto.id!!)
-        postDao.getAllFriendIdList(getCurrentUser())
-            .forEach { friendId ->
-                postQueueSenderService.sendUpdatedEvent(
-                    friendId,
-                    mapper.mapToResponseDTO(updatedPost!!)
-                )
-            }
+        if (checkUserIsCelebrity()) {
+            val updatedPost = postDao.getPost(dto.id!!)
+            postDao.getAllFriendIdList(getCurrentUser())
+                .forEach { friendId ->
+                    postQueueSenderService.sendUpdatedEvent(
+                        friendId,
+                        mapper.mapToResponseDTO(updatedPost!!)
+                    )
+                }
+        }
     }
 
     /**
@@ -123,6 +135,11 @@ class PostServiceImpl(
         }
 
         return cachedPosts
+    }
+
+    private fun checkUserIsCelebrity(): Boolean {
+        val currentUser = userService.getUserById(getCurrentUser())
+        return currentUser.isCelebrity
     }
 
     private fun getPostsFeedFromDB(

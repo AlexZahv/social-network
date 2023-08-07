@@ -38,4 +38,8 @@ data class UserResponseDTO(
     @Schema(name = "city", example = "Москва", description = "Город", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
     @JsonProperty("city")
     var city: String? = null,
+
+    @Schema(name = "isCelebrity", example = "true", description = "Пользователь является знаменитостью", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+    @JsonProperty("isCelebrity")
+    var isCelebrity: Boolean = false
 )

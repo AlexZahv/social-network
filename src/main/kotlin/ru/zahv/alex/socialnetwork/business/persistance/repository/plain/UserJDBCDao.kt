@@ -60,7 +60,8 @@ class UserJDBCDao(
                 "city=:city," +
                 "biography=:biography," +
                 "age=:age," +
-                "password:password",
+                "password:password " +
+                "where id=:id",
             namedParameters,
         )
         return userEntity
@@ -97,6 +98,7 @@ class UserRowMapper : RowMapper<UserEntity> {
         userEntity.sex = rs.getString("SEX")
         userEntity.birthdate = rs.getDate("BIRTH_DATE").toLocalDate()
         userEntity.age = rs.getInt("age")
+        userEntity.isCelebrity = rs.getBoolean("is_celebrity")
         return userEntity
     }
 }

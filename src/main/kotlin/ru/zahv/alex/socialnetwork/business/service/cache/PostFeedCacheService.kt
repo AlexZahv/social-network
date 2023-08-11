@@ -39,14 +39,12 @@ class PostFeedCacheService(
 
     fun storeCache(userId: String, postsList: List<PostResponseDTO>) {
         try {
-            synchronized(userId.intern()) {
-                if (postsList.isNotEmpty()) {
-                    val key = getPostsKey(userId)
-                    cleanCache(userId)
-                    val ops = redisPostsTemplate.opsForList()
-                    ops.rightPushAll(key, postsList)
-                    refreshExpirationTime(key)
-                }
+            if (postsList.isNotEmpty()) {
+                val key = getPostsKey(userId)
+                cleanCache(userId)
+                val ops = redisPostsTemplate.opsForList()
+                ops.rightPushAll(key, postsList)
+                refreshExpirationTime(key)
             }
         } catch (e: Exception) {
             println("Exception during store cache ${e.message}")

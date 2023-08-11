@@ -16,7 +16,7 @@ import ru.zahv.alex.socialnetwork.web.dto.posts.PostResponseDTO
 @Configuration
 @EnableCaching
 @ImportAutoConfiguration(classes = [CacheAutoConfiguration::class, RedisAutoConfiguration::class])
-class RedisConfig : CachingConfigurerSupport(), CachingConfigurer {
+class RedisConfiguration : CachingConfigurerSupport(), CachingConfigurer {
 
     @Bean
     fun redisPostsTemplate(connectionFactory: RedisConnectionFactory?): RedisTemplate<String, PostResponseDTO> {

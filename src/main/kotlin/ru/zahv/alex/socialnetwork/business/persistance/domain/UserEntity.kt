@@ -14,4 +14,5 @@ data class UserEntity(
     var city: String? = null,
     var age: Int? = null,
     var password: String? = null,
+    var isCelebrity: Boolean = false
 )

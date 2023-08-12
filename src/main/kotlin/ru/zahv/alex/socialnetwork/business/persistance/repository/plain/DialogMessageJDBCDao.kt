@@ -10,6 +10,7 @@ import org.springframework.jdbc.core.namedparam.SqlParameterSource
 import org.springframework.stereotype.Repository
 import ru.zahv.alex.socialnetwork.business.persistance.domain.DialogMessageEntity
 import ru.zahv.alex.socialnetwork.business.persistance.repository.DialogMessageDao
+import ru.zahv.alex.socialnetwork.utils.getDialogId
 import java.sql.ResultSet
 import java.sql.SQLException
 import java.util.*
@@ -24,8 +25,8 @@ class DialogMessageJDBCDao(
         val namedParameters: SqlParameterSource = BeanPropertySqlParameterSource(entity)
         masterTemplate.update(
             "insert into " +
-                    "dialog_message (id, message_text, from_user_id, to_user_id, create_date) " +
-                    "values (:id, :text, :fromUserId, :toUserId, :createDate) ",
+                    "dialog_message (id, dialog_id, message_text, from_user_id, to_user_id, create_date) " +
+                    "values (:id, :dialogId, :text, :fromUserId, :toUserId, :createDate) ",
             namedParameters,
         )
 
@@ -34,15 +35,11 @@ class DialogMessageJDBCDao(
 
     override fun getAllMessageList(userId: String, currentUserId: String): List<DialogMessageEntity>? {
         val namedParameters: SqlParameterSource = MapSqlParameterSource()
-            .addValue("fromUserId", userId)
-            .addValue("toUserId", userId)
-            .addValue("fromCurrentUserId", currentUserId)
-            .addValue("toCurrentUserId", currentUserId)
+            .addValue("dialogId", getDialogId(userId, currentUserId))
 
         return slaveTemplate.query(
             "SELECT * from dialog_message " +
-                    "where (from_user_id=:fromUserId and to_user_id=:toCurrentUserId) " +
-                    "OR (from_user_id=:fromCurrentUserId and to_user_id=:toUserId) " +
+                    "where dialog_id=:dialogId " +
                     " order by create_date desc",
             namedParameters,
             DialogMessageRowMapper(),

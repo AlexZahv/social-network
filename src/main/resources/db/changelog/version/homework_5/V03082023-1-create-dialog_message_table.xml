@@ -12,9 +12,8 @@
             </not>
         </preConditions>
         <createTable tableName="dialog_message">
-            <column name="id" type="varchar(50)">
-                <constraints primaryKey="true"/>
-            </column>
+            <column name="id" type="varchar(50)"/>
+            <column name="dialog_id" type="varchar(100)"/>
             <column name="from_user_id" type="varchar(50)">
                 <constraints foreignKeyName="message_from_user_fk" notNullConstraintName="message_from_user_notnull"/>
             </column>
@@ -26,5 +25,9 @@
                 <constraints notNullConstraintName="message_create_date_notnull"/>
             </column>
         </createTable>
+        <addPrimaryKey tableName="dialog_message" columnNames="id,dialog_id"/>
+        <sql>
+            SELECT create_distributed_table('dialog_message', 'dialog_id');
+        </sql>
     </changeSet>
 </databaseChangeLog>

@@ -28,7 +28,7 @@ import java.util.*
 @SecurityRequirement(name = OpenApiConfiguration.BEARER_AUTH_SECURITY_SCHEME_NAME)
 class DialogController(private val dialogService: DialogService) {
     /**
-     * GET /dialog/{user_id}/list
+     * GET /dialog/{user_id}
      *
      * @param userId  (required)
      * @return Диалог между двумя пользователями (status code 200)
@@ -67,7 +67,7 @@ class DialogController(private val dialogService: DialogService) {
         security = [SecurityRequirement(name = "bearerAuth")]
     )
     @Authenticated
-    @GetMapping(value = ["/{user_id}/list"], produces = ["application/json"])
+    @GetMapping(value = ["/{user_id}"], produces = ["application/json"])
     fun dialogUserIdListGet(
         @Parameter(
             name = "user_id",

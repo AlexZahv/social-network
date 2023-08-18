@@ -9,4 +9,6 @@ import ru.zahv.alex.socialnetwork.web.dto.LoginResponseDTO
  */
 interface AuthService {
     fun login(loginRequestDTO: LoginRequestDTO): LoginResponseDTO
+    fun checkIsAuthenticated()
+    fun checkIsAuthenticated(authHeader: String?)
 }

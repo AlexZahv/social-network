@@ -28,17 +28,18 @@ import static java.util.Optional.ofNullable;
 @EnableWebSocketMessageBroker
 public class WebSocketBrokerConfig implements WebSocketMessageBrokerConfigurer {
     private final AuthService authService;
+    public static final String WS_NEW_POST_URL = "/post/feed/posted";
+    public static final String WS_URL = "/ws";
 
     @Override
     public void configureMessageBroker(MessageBrokerRegistry config) {
-        config.enableSimpleBroker("/post/feed/posted");
-        config.setApplicationDestinationPrefixes("/app");
+        config.enableSimpleBroker(WS_NEW_POST_URL);
     }
 
     @Override
     public void registerStompEndpoints(StompEndpointRegistry registry) {
-        registry.addEndpoint("/ws");
-        registry.addEndpoint("/ws").setAllowedOriginPatterns("*").withSockJS();
+        registry.addEndpoint(WS_URL);
+        registry.addEndpoint(WS_URL).setAllowedOriginPatterns("*").withSockJS();
     }
 
     @Override

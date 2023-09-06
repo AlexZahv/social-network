@@ -1,7 +1,7 @@
 package ru.zahv.alex.socialnetwork.business.service
 
-import ru.zahv.alex.socialnetwork.web.dto.LoginRequestDTO
-import ru.zahv.alex.socialnetwork.web.dto.LoginResponseDTO
+import ru.zahv.alex.socialnetwork.web.dto.login.LoginRequestDTO
+import ru.zahv.alex.socialnetwork.web.dto.login.LoginResponseDTO
 
 /**
  * @author azakhvalinskiy

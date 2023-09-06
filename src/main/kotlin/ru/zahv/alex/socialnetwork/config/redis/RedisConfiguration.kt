@@ -1,4 +1,4 @@
-package ru.zahv.alex.socialnetwork.config
+package ru.zahv.alex.socialnetwork.config.redis
 
 import org.springframework.boot.autoconfigure.ImportAutoConfiguration
 import org.springframework.boot.autoconfigure.cache.CacheAutoConfiguration

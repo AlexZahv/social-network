@@ -17,9 +17,9 @@ import ru.zahv.alex.socialnetwork.aop.Authenticated
 import ru.zahv.alex.socialnetwork.business.service.UserService
 import ru.zahv.alex.socialnetwork.config.OpenApiConfiguration
 import ru.zahv.alex.socialnetwork.web.dto.ErrorResponseDTO
-import ru.zahv.alex.socialnetwork.web.dto.UserRegisterRequestDTO
-import ru.zahv.alex.socialnetwork.web.dto.UserRegisterResponseDTO
-import ru.zahv.alex.socialnetwork.web.dto.UserResponseDTO
+import ru.zahv.alex.socialnetwork.web.dto.user.UserRegisterRequestDTO
+import ru.zahv.alex.socialnetwork.web.dto.user.UserRegisterResponseDTO
+import ru.zahv.alex.socialnetwork.web.dto.user.UserResponseDTO
 
 @RestController
 @RequestMapping("/api/user")

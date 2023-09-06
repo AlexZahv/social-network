@@ -3,9 +3,9 @@ package ru.zahv.alex.socialnetwork.business.mapper
 import org.mapstruct.Mapper
 import org.mapstruct.Mapping
 import ru.zahv.alex.socialnetwork.business.persistance.domain.UserEntity
-import ru.zahv.alex.socialnetwork.web.dto.UserRegisterRequestDTO
-import ru.zahv.alex.socialnetwork.web.dto.UserRegisterResponseDTO
-import ru.zahv.alex.socialnetwork.web.dto.UserResponseDTO
+import ru.zahv.alex.socialnetwork.web.dto.user.UserRegisterRequestDTO
+import ru.zahv.alex.socialnetwork.web.dto.user.UserRegisterResponseDTO
+import ru.zahv.alex.socialnetwork.web.dto.user.UserResponseDTO
 
 @Mapper(componentModel = "spring")
 interface UserMapper {

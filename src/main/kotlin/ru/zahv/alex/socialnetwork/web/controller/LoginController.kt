@@ -13,8 +13,8 @@ import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RestController
 import ru.zahv.alex.socialnetwork.business.service.AuthService
 import ru.zahv.alex.socialnetwork.web.dto.ErrorResponseDTO
-import ru.zahv.alex.socialnetwork.web.dto.LoginRequestDTO
-import ru.zahv.alex.socialnetwork.web.dto.LoginResponseDTO
+import ru.zahv.alex.socialnetwork.web.dto.login.LoginRequestDTO
+import ru.zahv.alex.socialnetwork.web.dto.login.LoginResponseDTO
 
 @Tag(name = "login", description = "the login API")
 @RestController

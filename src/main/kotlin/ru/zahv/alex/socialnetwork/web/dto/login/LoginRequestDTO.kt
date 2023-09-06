@@ -1,4 +1,4 @@
-package ru.zahv.alex.socialnetwork.web.dto
+package ru.zahv.alex.socialnetwork.web.dto.login
 
 import com.fasterxml.jackson.annotation.JsonProperty
 import io.swagger.v3.oas.annotations.media.Schema

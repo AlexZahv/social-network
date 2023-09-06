@@ -7,9 +7,9 @@ import ru.zahv.alex.socialnetwork.business.exceptions.UserNotFoundException
 import ru.zahv.alex.socialnetwork.business.mapper.UserMapper
 import ru.zahv.alex.socialnetwork.business.persistance.repository.UserDao
 import ru.zahv.alex.socialnetwork.business.service.UserService
-import ru.zahv.alex.socialnetwork.web.dto.UserRegisterRequestDTO
-import ru.zahv.alex.socialnetwork.web.dto.UserRegisterResponseDTO
-import ru.zahv.alex.socialnetwork.web.dto.UserResponseDTO
+import ru.zahv.alex.socialnetwork.web.dto.user.UserRegisterRequestDTO
+import ru.zahv.alex.socialnetwork.web.dto.user.UserRegisterResponseDTO
+import ru.zahv.alex.socialnetwork.web.dto.user.UserResponseDTO
 
 @Service
 class UserServiceImpl(

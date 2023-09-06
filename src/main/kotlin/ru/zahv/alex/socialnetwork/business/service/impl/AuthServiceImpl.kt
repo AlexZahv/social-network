@@ -8,8 +8,8 @@ import ru.zahv.alex.socialnetwork.business.service.AuthService
 import ru.zahv.alex.socialnetwork.business.service.AuthTokenService
 import ru.zahv.alex.socialnetwork.business.service.UserService
 import ru.zahv.alex.socialnetwork.utils.SecurityContextHolder
-import ru.zahv.alex.socialnetwork.web.dto.LoginRequestDTO
-import ru.zahv.alex.socialnetwork.web.dto.LoginResponseDTO
+import ru.zahv.alex.socialnetwork.web.dto.login.LoginRequestDTO
+import ru.zahv.alex.socialnetwork.web.dto.login.LoginResponseDTO
 import java.time.LocalDateTime
 import java.util.regex.Pattern
 

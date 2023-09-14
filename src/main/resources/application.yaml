@@ -66,3 +66,6 @@ logging:
     org:
       springframework:
         messaging: DEBUG
+
+services:
+  dialogs: ${DIALOGS_BASE_URL:http://localhost:8081}

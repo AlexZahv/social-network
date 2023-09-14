@@ -4,7 +4,7 @@ import ru.zahv.alex.socialnetwork.web.dto.dialogs.DialogMessageRequestDTO
 import ru.zahv.alex.socialnetwork.web.dto.dialogs.DialogMessageResponseDTO
 
 interface DialogService {
-    fun addMessage(dto: DialogMessageRequestDTO): DialogMessageResponseDTO
+    fun addMessage(dto: DialogMessageRequestDTO)
 
     fun getAllMessageList(userId: String): List<DialogMessageResponseDTO>
 }

@@ -2,13 +2,12 @@
 <configuration>
     <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
         <encoder>
-            <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
+            <pattern>%d{HH:mm:ss.SSS} [%thread] traceId: %X{trace-id}  %-5level %logger{36} - %msg%n</pattern>
         </encoder>
     </appender>
     <appender name="filebeatAppender" class="ch.qos.logback.core.rolling.RollingFileAppender">
         <file>./logs/otus-social-network.log</file>
         <append>true</append>
-        <!--        <encoder class="net.logstash.logback.encoder.LogstashEncoder"/>-->
         <encoder class="net.logstash.logback.encoder.LoggingEventCompositeJsonEncoder">
             <providers>
                 <timestamp>
@@ -22,7 +21,9 @@
                         "level":"%p",
                         "thread":"%thread",
                         "class":"%logger{40}",
-                        "message":"%m"
+                        "message":"%m",
+                        "spanId":"${spanId}",
+                        "traceId":"${traceId}"
                         }
                     </pattern>
                 </pattern>

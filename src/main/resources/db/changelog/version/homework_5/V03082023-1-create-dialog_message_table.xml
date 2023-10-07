@@ -26,8 +26,8 @@
             </column>
         </createTable>
         <addPrimaryKey tableName="dialog_message" columnNames="id,dialog_id"/>
-        <sql>
-            SELECT create_distributed_table('dialog_message', 'dialog_id');
-        </sql>
+<!--        <sql>-->
+<!--            SELECT create_distributed_table('dialog_message', 'dialog_id');-->
+<!--        </sql>-->
     </changeSet>
 </databaseChangeLog>
